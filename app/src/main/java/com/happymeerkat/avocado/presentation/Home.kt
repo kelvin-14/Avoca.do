@@ -61,7 +61,8 @@ fun Home(
             ListScreen(
                 modifier = Modifier,
                 listItems = mockItems,
-                toggleEditState = { editState = true }
+                toggleEditState = { editState = true },
+                editState = editState
             )
         }
 

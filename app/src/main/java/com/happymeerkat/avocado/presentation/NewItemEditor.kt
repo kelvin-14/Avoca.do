@@ -3,10 +3,14 @@ package com.happymeerkat.avocado.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,15 +30,25 @@ fun NewItemEditor(
             .background(Color.Gray.copy(alpha = 0.5f))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         ) {
-            TextField(
-                value = "",
-                onValueChange = {},
-                placeholder = {Text("enter task")},
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {closeModal()})
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = "",
+                    onValueChange = {},
+                    placeholder = {Text("enter task")},
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {closeModal()})
+                )
+                Icon(imageVector = Icons.Default.Favorite, contentDescription = "")
+                Icon(imageVector = Icons.Default.Favorite, contentDescription = "")
+            }
+
         }
     }
 

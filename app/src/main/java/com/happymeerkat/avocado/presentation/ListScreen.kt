@@ -16,7 +16,8 @@ import com.happymeerkat.avocado.domain.ListItem
 fun ListScreen(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
-    toggleEditState: () -> Unit
+    toggleEditState: () -> Unit,
+    editState: Boolean
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -27,12 +28,15 @@ fun ListScreen(
             }
         }
 
-        FloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd),
-            onClick = { toggleEditState() }
-        ) {
+        if(editState == false) {
+            FloatingActionButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = { toggleEditState() }
+            ) {
 
+            }
         }
+
     }
 
 }
