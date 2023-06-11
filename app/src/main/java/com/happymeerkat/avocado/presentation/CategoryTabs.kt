@@ -2,16 +2,25 @@ package com.happymeerkat.avocado.presentation
 
 import android.graphics.drawable.shapes.Shape
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PlusOne
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -24,10 +33,12 @@ fun CategoryTabs(
     addCategory: () -> Unit
 ) {
     Row(
-        modifier = modifier
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier.weight(4f)
+            modifier = Modifier
+                .weight(4f)
                 .padding(vertical = 4.dp)
         ) {
             LazyRow {
@@ -36,13 +47,15 @@ fun CategoryTabs(
                 }
             }
         }
-        Column(
-            modifier = Modifier.weight(2f)
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
-            TextButton(
-                onClick = {}
-            ) {
-                Text(text = "Add category")
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "")
+            }
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "")
             }
         }
     }
@@ -61,7 +74,10 @@ fun Tab(
     ) {
         Text(
             modifier = Modifier
-                .padding( horizontal = 8.dp),
+                .padding(
+                    horizontal = 8.dp,
+                    vertical = 4.dp
+                ),
             text = category.name
         )
     }
