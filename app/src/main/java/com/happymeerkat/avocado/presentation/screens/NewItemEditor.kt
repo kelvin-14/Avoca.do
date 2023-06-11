@@ -1,4 +1,4 @@
-package com.happymeerkat.avocado.presentation
+package com.happymeerkat.avocado.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,16 +14,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.happymeerkat.avocado.presentation.vm.EditItemVM
 
 @Composable
 fun NewItemEditor(
     modifier: Modifier = Modifier,
-    closeModal: () -> Unit
+    closeModal: () -> Unit,
+    viewModel: EditItemVM = hiltViewModel()
 ) {
+    val state = viewModel.itemUIState.collectAsState().value
+
     Box(
         modifier = modifier
             .clickable { closeModal() }
@@ -39,11 +45,13 @@ fun NewItemEditor(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {},
+                    value = state.title,
+                    onValueChange = {viewModel.editTitle(it)},
                     placeholder = {Text("enter task")},
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {closeModal()})
+                    keyboardActions = KeyboardActions(onDone = {
+                        closeModalAndSave(closeModal = closeModal, save = {viewModel.upsertListItem()})
+                    })
                 )
                 Icon(imageVector = Icons.Default.Favorite, contentDescription = "")
                 Icon(imageVector = Icons.Default.Favorite, contentDescription = "")
@@ -52,4 +60,12 @@ fun NewItemEditor(
         }
     }
 
+}
+
+fun closeModalAndSave(
+    closeModal: () -> Unit,
+    save: () -> Unit
+) {
+    closeModal()
+    save()
 }

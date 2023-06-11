@@ -1,4 +1,4 @@
-package com.happymeerkat.avocado.presentation
+package com.happymeerkat.avocado.presentation.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

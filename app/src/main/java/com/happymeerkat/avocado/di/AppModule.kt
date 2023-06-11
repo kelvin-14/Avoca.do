@@ -5,7 +5,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
+import com.happymeerkat.avocado.data.CategoryDao
+import com.happymeerkat.avocado.data.CategoryRepositoryImpl
+import com.happymeerkat.avocado.data.ListDao
 import com.happymeerkat.avocado.data.ListDatabase
+import com.happymeerkat.avocado.data.ListRepositoryImpl
+import com.happymeerkat.avocado.domain.repository.CategoryRepository
+import com.happymeerkat.avocado.domain.repository.ListRepository
+import com.happymeerkat.avocado.domain.use_case.GetItems
+import com.happymeerkat.avocado.domain.use_case.ListUseCases
+import com.happymeerkat.avocado.domain.use_case.UpsertItem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,12 +37,27 @@ object AppModule {
         return applicationContext.userDataStore
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideUseCases(
-//    ) {
-//
-//    }
+    @Provides
+    @Singleton
+    fun provideListRepository(db: ListDatabase): ListRepository {
+        return ListRepositoryImpl(db.getListDao())
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepository(db: ListDatabase): CategoryRepository {
+        return CategoryRepositoryImpl(db.getCategoryDao())
+    }
+    @Provides
+    @Singleton
+    fun provideUseCases(
+        repo: ListRepository
+    ): ListUseCases {
+        return ListUseCases(
+            getItems = GetItems(repo),
+            upsertItem = UpsertItem(repo)
+        )
+    }
 
     @Provides
     @Singleton

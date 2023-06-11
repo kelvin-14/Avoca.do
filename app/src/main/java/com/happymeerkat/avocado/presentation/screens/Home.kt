@@ -1,19 +1,20 @@
-package com.happymeerkat.avocado.presentation
+package com.happymeerkat.avocado.presentation.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
+import com.happymeerkat.avocado.presentation.vm.MainVM
 
 
 val mockCategories = listOf(
@@ -25,22 +26,14 @@ val mockCategories = listOf(
     Category("Goals")
 )
 
-val mockItems = listOf(
-    ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "task2", description = "description2"),ListItem(title = "task1", description = "description"),
-    ListItem(title = "last task", description = "description2"),
-)
 @Composable
 fun Home(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: MainVM = hiltViewModel()
 ) {
+    val state = viewModel.mainUIState.collectAsState().value
     var editState by remember{ mutableStateOf(false) }
+    var editWord: String by remember{ mutableStateOf("") }
 
     Box(
         modifier = modifier
@@ -54,8 +47,10 @@ fun Home(
                 addCategory = {}
             )
             ListScreen(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                listItems = mockItems,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                listItems = state.listItems,
                 toggleEditState = { editState = true },
                 editState = editState
             )
