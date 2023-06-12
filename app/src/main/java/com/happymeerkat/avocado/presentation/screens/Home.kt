@@ -26,9 +26,14 @@ val mockCategories = listOf(
     Category("Goals")
 )
 
+val mockListItems = listOf(
+    ListItem(title = "mock task", description = "mock desc")
+)
+
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
+    navigateToDetails: (title: String, description: String) -> Unit,
     viewModel: MainVM = hiltViewModel()
 ) {
     val state = viewModel.mainUIState.collectAsState().value
@@ -52,7 +57,9 @@ fun Home(
                     .weight(1f),
                 listItems = state.listItems,
                 toggleEditState = { editState = true },
-                editState = editState
+                editState = editState,
+                navigateToDetails = navigateToDetails,
+
             )
 
             if(editState == false){

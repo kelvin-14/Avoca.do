@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.happymeerkat.avocado.presentation.navigation.RootGraph
 import com.happymeerkat.avocado.presentation.screens.Home
 import com.happymeerkat.avocado.ui.theme.AvocadoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,11 +26,12 @@ class MainActivity : ComponentActivity() {
             AvocadoTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(8.dp),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Home(modifier = Modifier.fillMaxSize())
+                    RootGraph(navController = rememberNavController())
                 }
             }
         }

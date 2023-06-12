@@ -20,12 +20,12 @@ fun ListItemView(
     modifier: Modifier = Modifier.fillMaxWidth(),
     item: ListItem,
     changeCheckedState: () -> Unit,
-    goToDetails: () -> Unit
+    navigateToDetails: () -> Unit
 ) {
     Card(
         modifier = modifier
             .padding(vertical = 4.dp),
-        onClick = { goToDetails() }
+        onClick = { navigateToDetails()}
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,

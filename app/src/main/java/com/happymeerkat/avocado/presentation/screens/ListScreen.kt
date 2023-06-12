@@ -12,7 +12,8 @@ fun ListScreen(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
     toggleEditState: () -> Unit,
-    editState: Boolean
+    editState: Boolean,
+    navigateToDetails: (title: String, description: String) -> Unit,
 ) {
     Box(modifier = modifier) {
         LazyColumn(
@@ -22,7 +23,7 @@ fun ListScreen(
                 ListItemView(
                     item = listItem,
                     changeCheckedState = {},
-                    goToDetails = {}
+                    navigateToDetails = {navigateToDetails(listItem.title, listItem.description ?: "")},
                 )
             }
         }
