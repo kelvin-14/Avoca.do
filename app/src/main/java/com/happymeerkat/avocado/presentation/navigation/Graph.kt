@@ -10,4 +10,6 @@ sealed class Graph(val route: String) {
             return "details_graph/$title?description=$description"
         }
     }
+
+    object COMPLETED: Graph(route = "completed_graph")
 }

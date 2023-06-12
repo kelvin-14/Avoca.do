@@ -30,10 +30,13 @@ class MainVM @Inject constructor(
         getListItemsJob = listUseCases
             .getItems()
             .onEach { listOfItems ->
-                _mainUIState.value = mainUIState.value.copy(listItems = listOfItems)
+                _mainUIState.value = mainUIState.value.copy(
+                    listItems = listOfItems
+                )
             }
             .launchIn(viewModelScope)
     }
+
     fun changeCurrentCategory(category: Category) {
         _mainUIState.value = mainUIState.value.copy(currentCategory = category)
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
@@ -58,6 +61,7 @@ class MainVM @Inject constructor(
 
 data class MainUIState(
     val listItems: List<ListItem> = emptyList() ,
+    val listCompletedItems: List<ListItem> = emptyList(),
     val currentCategory: Category = Category("All"),
     val categories: List<Category> = emptyList(),
     val selected: Set<Int> = emptySet(), // e.g when deleting, put the id of selected items here

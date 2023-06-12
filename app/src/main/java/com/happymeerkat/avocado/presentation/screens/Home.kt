@@ -60,12 +60,13 @@ fun Home(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                listItems = if(state.currentCategory.name == "All") state.listItems
-                else state.listItems.filter { it.category == state.currentCategory.name },
+                listItems = if(state.currentCategory.name == "All") state.listItems.filter { !it.completed }
+                else state.listItems.filter { (!it.completed) and (it.category == state.currentCategory.name) },
                 toggleEditState = { editState = true },
                 editState = editState,
                 navigateToDetails = navigateToDetails,
-                currentCategory = state.currentCategory
+                currentCategory = state.currentCategory,
+                completedItems = state.listItems.filter{it.completed}
             )
 
             if(!editState){

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ListDao {
-    @Query("SELECT * FROM list WHERE completed = 0")
+    @Query("SELECT * FROM list")
     fun getAllListItems(): Flow<List<ListItem>>
 
     @Upsert
