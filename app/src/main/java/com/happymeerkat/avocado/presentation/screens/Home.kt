@@ -66,7 +66,8 @@ fun Home(
                 editState = editState,
                 navigateToDetails = navigateToDetails,
                 currentCategory = state.currentCategory,
-                completedItems = state.listItems.filter{it.completed}
+                completedItems = if(state.currentCategory.name == "All") state.listItems.filter { it.completed }
+                else state.listItems.filter { (it.completed) and (it.category == state.currentCategory.name) }
             )
 
             if(!editState){
