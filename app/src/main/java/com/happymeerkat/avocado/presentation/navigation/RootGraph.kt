@@ -6,7 +6,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.happymeerkat.avocado.presentation.screens.CompletedView
 import com.happymeerkat.avocado.presentation.screens.DetailsView
 import com.happymeerkat.avocado.presentation.screens.Home
 
