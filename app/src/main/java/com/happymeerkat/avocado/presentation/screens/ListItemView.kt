@@ -12,15 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.ListItem
+import com.happymeerkat.avocado.presentation.vm.EditItemVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListItemView(
     modifier: Modifier = Modifier.fillMaxWidth(),
     item: ListItem,
-    changeCheckedState: () -> Unit,
-    navigateToDetails: () -> Unit
+    navigateToDetails: () -> Unit,
+    editVM: EditItemVM = hiltViewModel()
 ) {
     Card(
         modifier = modifier
@@ -31,7 +33,9 @@ fun ListItemView(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = true, onCheckedChange = {changeCheckedState()} )
+            Checkbox(checked = item.completed, onCheckedChange = {
+                editVM.updateItem(item.copy(completed = !item.completed))
+            })
             Text(text = item.title )
         }
         

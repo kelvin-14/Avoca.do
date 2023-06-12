@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happymeerkat.avocado.domain.model.ListItem
@@ -22,15 +23,27 @@ class EditItemVM @Inject constructor(
         _itemUIState.value = itemUIState.value.copy(title = newTitle)
     }
 
-    fun upsertListItem() {
+    private suspend fun upsertListItem(item: ListItem) {
+        listUseCases.upsertItem(item)
+    }
+
+    fun createNewItem() {
         viewModelScope.launch {
-            listUseCases.upsertItem(ListItem(
+            val item = ListItem(
                 title = _itemUIState.value.title,
                 description = _itemUIState.value.description,
                 category = _itemUIState.value.category, // TODO:change to
                 dateMade = _itemUIState.value.dateMade,
                 dateDue = _itemUIState.value.dueDate
-            ))
+            )
+            upsertListItem(item)
+        }
+    }
+
+    fun updateItem(item: ListItem) {
+        viewModelScope.launch {
+            Log.d("TO BE UPDATED", item.id.toString()+ " " + item.title + " " + item.completed.toString())
+            upsertListItem(item)
         }
     }
 }

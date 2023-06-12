@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.screens
 
+import android.content.ClipData
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,11 +23,9 @@ fun ListScreen(
             items(listItems) {listItem ->
                 ListItemView(
                     item = listItem,
-                    changeCheckedState = {},
                     navigateToDetails = {navigateToDetails(listItem.title, listItem.description ?: "")},
                 )
             }
         }
     }
 }
-

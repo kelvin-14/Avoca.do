@@ -42,6 +42,13 @@ class MainVM @Inject constructor(
         _mainUIState.value = mainUIState.value.copy(editState = true)
     }
 
+    fun completeItem(item: ListItem) {
+        item.completed = true
+    }
+
+    fun undoCompleteItem(item: ListItem) {
+        item.completed = false
+    }
 }
 
 data class MainUIState(
@@ -49,5 +56,5 @@ data class MainUIState(
     val category: Category = Category("ALL"),
     val categories: List<Category> = emptyList(),
     val selected: Set<Int> = emptySet(), // e.g when deleting, put the id of selected items here
-    val editState: Boolean = false
+    val editState: Boolean = false,
     )

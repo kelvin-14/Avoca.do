@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
+import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.happymeerkat.avocado.presentation.vm.MainVM
 
 
@@ -34,11 +35,11 @@ val mockListItems = listOf(
 fun Home(
     modifier: Modifier = Modifier,
     navigateToDetails: (title: String, description: String) -> Unit,
-    viewModel: MainVM = hiltViewModel()
+    viewModel: MainVM = hiltViewModel(),
+    editVM: EditItemVM = hiltViewModel()
 ) {
     val state = viewModel.mainUIState.collectAsState().value
     var editState by remember{ mutableStateOf(false) }
-    var editWord: String by remember{ mutableStateOf("") }
 
     Box(
         modifier = modifier
@@ -58,8 +59,7 @@ fun Home(
                 listItems = state.listItems,
                 toggleEditState = { editState = true },
                 editState = editState,
-                navigateToDetails = navigateToDetails,
-
+                navigateToDetails = navigateToDetails
             )
 
             if(editState == false){

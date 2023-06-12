@@ -15,4 +15,5 @@ data class ListItem(
     val category: String? = null,
     val dateMade: Long? = null,
     val dateDue: Long? = null,
+    var completed: Boolean = false
 )

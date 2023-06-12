@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -44,6 +45,7 @@ fun NewItemEditor(
     Box(
         modifier = modifier
             .clickable { closeModal() }
+            .fillMaxSize()
             .background(Color.Gray.copy(alpha = 0.5f))
     ) {
         Row(
@@ -62,15 +64,24 @@ fun NewItemEditor(
                     onValueChange = {viewModel.editTitle(it)},
                     placeholder = {Text("enter task")},
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        closeModalAndSave(closeModal = closeModal, save = {viewModel.upsertListItem()})
-                    })
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if(state.title == "")
+                                closeModal()
+                            else
+                                closeModalAndSave(
+                                    closeModal = closeModal,
+                                    save = {viewModel.createNewItem()},
+                                )
+                        }
+                    )
                 )
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
                 }
                 Row(
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier
+                        .padding(4.dp)
                 ){
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(

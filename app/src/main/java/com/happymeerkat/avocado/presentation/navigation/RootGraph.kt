@@ -42,7 +42,8 @@ fun RootGraph(
         ){
             ListItemDetails(
                 title = it.arguments?.getString("title") ?: "no title",
-                description = it.arguments?.getString("description") ?: "no description"
+                description = it.arguments?.getString("description") ?: "no description",
+                backToHome = {navController.navigateUp()}
             )
         }
 
