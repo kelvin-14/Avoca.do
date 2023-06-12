@@ -18,7 +18,7 @@ import com.happymeerkat.avocado.presentation.vm.EditItemVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListItemView(
+fun ItemView(
     modifier: Modifier = Modifier.fillMaxWidth(),
     item: ListItem,
     navigateToDetails: () -> Unit,

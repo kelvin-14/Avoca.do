@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happymeerkat.avocado.domain.model.Category
@@ -27,11 +28,15 @@ class MainVM @Inject constructor(
     fun getAllListItems() {
         getListItemsJob?.cancel()
         getListItemsJob = listUseCases
-            .getItems(category = _mainUIState.value.category.name)
+            .getItems()
             .onEach { listOfItems ->
                 _mainUIState.value = mainUIState.value.copy(listItems = listOfItems)
             }
             .launchIn(viewModelScope)
+    }
+    fun changeCurrentCategory(category: Category) {
+        _mainUIState.value = mainUIState.value.copy(currentCategory = category)
+        Log.d("CATEGORY", mainUIState.value.currentCategory.name)
     }
 
     fun enterEditState() {
@@ -53,7 +58,7 @@ class MainVM @Inject constructor(
 
 data class MainUIState(
     val listItems: List<ListItem> = emptyList() ,
-    val category: Category = Category("ALL"),
+    val currentCategory: Category = Category("All"),
     val categories: List<Category> = emptyList(),
     val selected: Set<Int> = emptySet(), // e.g when deleting, put the id of selected items here
     val editState: Boolean = false,

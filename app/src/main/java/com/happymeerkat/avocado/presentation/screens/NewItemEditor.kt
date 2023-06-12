@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,13 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 
 @Composable
 fun NewItemEditor(
     modifier: Modifier = Modifier,
     closeModal: () -> Unit,
-    viewModel: EditItemVM = hiltViewModel()
+    viewModel: EditItemVM = hiltViewModel(),
+    currentCategory: Category
 ) {
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
@@ -46,7 +47,7 @@ fun NewItemEditor(
         modifier = modifier
             .clickable { closeModal() }
             .fillMaxSize()
-            .background(Color.Gray.copy(alpha = 0.5f))
+            .background(Color.Black.copy(alpha = 0.8f))
     ) {
         Row(
             modifier = Modifier
@@ -71,7 +72,8 @@ fun NewItemEditor(
                             else
                                 closeModalAndSave(
                                     closeModal = closeModal,
-                                    save = {viewModel.createNewItem()},
+                                    save = {viewModel.createNewItem(currentCategory)},
+                                    clearField = {viewModel.editTitle("")}
                                 )
                         }
                     )
@@ -95,12 +97,6 @@ fun NewItemEditor(
                             contentDescription = ""
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.Category,
-                            contentDescription = ""
-                        )
-                    }
                 }
             }
 
@@ -111,8 +107,10 @@ fun NewItemEditor(
 
 fun closeModalAndSave(
     closeModal: () -> Unit,
-    save: () -> Unit
+    save: () -> Unit,
+    clearField: () -> Unit
 ) {
     closeModal()
     save()
+    clearField()
 }

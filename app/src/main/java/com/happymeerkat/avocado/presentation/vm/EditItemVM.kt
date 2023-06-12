@@ -3,6 +3,7 @@ package com.happymeerkat.avocado.presentation.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
@@ -27,12 +28,12 @@ class EditItemVM @Inject constructor(
         listUseCases.upsertItem(item)
     }
 
-    fun createNewItem() {
+    fun createNewItem(category: Category) {
         viewModelScope.launch {
             val item = ListItem(
                 title = _itemUIState.value.title,
                 description = _itemUIState.value.description,
-                category = _itemUIState.value.category, // TODO:change to
+                category = category.name, // TODO:change to
                 dateMade = _itemUIState.value.dateMade,
                 dateDue = _itemUIState.value.dueDate
             )
@@ -46,6 +47,17 @@ class EditItemVM @Inject constructor(
             upsertListItem(item)
         }
     }
+
+
+//    fun collapseCategoryMenu() {
+//        _itemUIState.value = itemUIState.value.copy(categoryExpanded = false)
+//        Log.d("MENU", itemUIState.value.categoryExpanded.toString())
+//    }
+//
+//    fun expandCategoryMenu() {
+//        _itemUIState.value = itemUIState.value.copy(categoryExpanded = true)
+//        Log.d("MENU", itemUIState.value.categoryExpanded.toString())
+//    }
 }
 
 data class ItemUIState(
@@ -53,5 +65,6 @@ data class ItemUIState(
     val description: String = "",
     val category: String = "ALL",
     val dateMade: Long? = null,
-    val dueDate: Long? = null
+    val dueDate: Long? = null,
+    var categoryExpanded: Boolean = false
 )
