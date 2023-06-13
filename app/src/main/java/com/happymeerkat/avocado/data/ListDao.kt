@@ -22,6 +22,9 @@ interface ListDao {
     @Query("DELETE FROM list WHERE category = :category AND completed = 1")
     suspend fun deleteAllCompletedByCategory(category: String)
 
+    @Query("DELETE FROM list WHERE category = :category")
+    suspend fun deleteAllByCategory(category: String)
+
     @Query("DELETE FROM list WHERE completed = 1")
     suspend fun deleteAllCompleted()
 }

@@ -13,5 +13,6 @@ interface ListRepository {
 
     suspend fun deleteAllCompleted()
 
-    suspend fun deleteAllCompletedByCategory(category: String)
+    suspend fun deleteAllCompletedByCategory(category: Category)
+    suspend fun deleteAllByCategory(category: Category)
 }

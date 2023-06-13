@@ -13,6 +13,7 @@ import com.happymeerkat.avocado.data.ListRepositoryImpl
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import com.happymeerkat.avocado.domain.use_case.CreateCategory
+import com.happymeerkat.avocado.domain.use_case.DeleteCategory
 import com.happymeerkat.avocado.domain.use_case.DeleteCompletedTasks
 import com.happymeerkat.avocado.domain.use_case.GetCategories
 import com.happymeerkat.avocado.domain.use_case.GetItems
@@ -61,7 +62,8 @@ object AppModule {
             upsertItem = UpsertItem(repo),
             deleteCompletedTasks = DeleteCompletedTasks(repo),
             getAllCategories = GetCategories(catRepo),
-            createCategory = CreateCategory(catRepo)
+            createCategory = CreateCategory(catRepo),
+            deleteCategory = DeleteCategory(catRepo = catRepo, listRepo = repo)
         )
     }
 

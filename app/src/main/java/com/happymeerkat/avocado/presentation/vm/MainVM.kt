@@ -56,6 +56,12 @@ class MainVM @Inject constructor(
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
     }
 
+    fun deleteCurrentCategory() {
+        viewModelScope.launch {
+            listUseCases.deleteCategory(_mainUIState.value.currentCategory)
+        }
+    }
+
     sealed interface Response
     object Success: Response
     data class Failure (val errorMessage: String): Response
@@ -91,12 +97,6 @@ class MainVM @Inject constructor(
 
         // change category name for all tasks with that name
 
-    }
-
-    fun deleteCurrentCategory() {
-        // delete all tasks with that name
-
-        // delete category from db
     }
 
     fun deleteCompletedTasks() {

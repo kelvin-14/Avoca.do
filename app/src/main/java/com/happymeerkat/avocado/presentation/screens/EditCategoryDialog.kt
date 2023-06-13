@@ -55,7 +55,7 @@ fun EditCategoryDialog(
                 Row(
 
                 ) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { deleteCategoryExt(deleteCurrentCategory, closeModal) }) {
                         Text(text = "DELETE CATEGORY", color = Color.Red)
                     }
                     TextButton(onClick = { /*TODO*/ }) {
@@ -65,5 +65,12 @@ fun EditCategoryDialog(
             }
         }
     }
+}
 
+fun deleteCategoryExt(
+    delete: () -> Unit,
+    closeModal: () -> Unit
+) {
+    delete()
+    closeModal()
 }

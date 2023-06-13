@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.data
 
+import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,11 @@ class ListRepositoryImpl @Inject constructor(
         listDao.deleteAllCompleted()
     }
 
-    override suspend fun deleteAllCompletedByCategory(category: String) {
-        listDao.deleteAllCompletedByCategory(category)
+    override suspend fun deleteAllCompletedByCategory(category: Category) {
+        listDao.deleteAllCompletedByCategory(category.name)
+    }
+
+    override suspend fun deleteAllByCategory(category: Category) {
+        listDao.deleteAllByCategory(category.name)
     }
 }

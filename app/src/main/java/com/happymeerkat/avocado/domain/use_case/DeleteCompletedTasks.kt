@@ -10,7 +10,7 @@ class DeleteCompletedTasks(
         if(category.name == "All") {
             repository.deleteAllCompleted()
         }else{
-            repository.deleteAllCompletedByCategory(category.name)
+            repository.deleteAllCompletedByCategory(category)
         }
     }
 }
