@@ -57,6 +57,24 @@ class MainVM @Inject constructor(
     fun undoCompleteItem(item: ListItem) {
         item.completed = false
     }
+
+    fun editCurrentCategoryName() {
+        // change category name in db but make sure no such name exists first
+
+        // change category name for all tasks with that name
+
+    }
+
+    fun deleteCurrentCategory() {
+        // delete all tasks with that name
+
+        // delete category from db
+    }
+
+    fun deleteCompletedTasks() {
+        // delete all tasks of current category where completed = true
+    }
+
 }
 
 data class MainUIState(

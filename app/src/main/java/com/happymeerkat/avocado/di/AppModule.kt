@@ -12,6 +12,7 @@ import com.happymeerkat.avocado.data.ListDatabase
 import com.happymeerkat.avocado.data.ListRepositoryImpl
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
+import com.happymeerkat.avocado.domain.use_case.DeleteCompletedTasks
 import com.happymeerkat.avocado.domain.use_case.GetItems
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
 import com.happymeerkat.avocado.domain.use_case.UpsertItem
@@ -55,7 +56,8 @@ object AppModule {
     ): ListUseCases {
         return ListUseCases(
             getItems = GetItems(repo),
-            upsertItem = UpsertItem(repo)
+            upsertItem = UpsertItem(repo),
+            deleteCompletedTasks = DeleteCompletedTasks(repo)
         )
     }
 

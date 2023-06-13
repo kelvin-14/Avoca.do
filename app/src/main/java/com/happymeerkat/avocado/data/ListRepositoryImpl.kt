@@ -13,4 +13,11 @@ class ListRepositoryImpl @Inject constructor(
     override suspend fun upsertItem(listItem: ListItem) = listDao.upsertListItem(listItem)
 
     override suspend fun deleteItem(listItem: ListItem) = listDao.deleteListItem(listItem)
+    override suspend fun deleteAllCompleted() {
+        listDao.deleteAllCompleted()
+    }
+
+    override suspend fun deleteAllCompletedByCategory(category: String) {
+        listDao.deleteAllCompletedByCategory(category)
+    }
 }

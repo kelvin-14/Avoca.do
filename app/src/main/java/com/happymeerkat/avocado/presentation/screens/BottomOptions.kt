@@ -32,25 +32,25 @@ fun BottomOptions(
 
     ) {
 
-        QuickFeature(
-            modifier = Modifier.weight(1f),
-            icon = Icons.Default.Search,
-            name = "search",
-            onClick = {}
-        )
-        QuickFeature(
-            modifier = Modifier.weight(1f),
-            icon = Icons.Default.SortByAlpha,
-            name = "sort by",
-            onClick = {}
-        )
-
-        QuickFeature(
-            modifier = Modifier.weight(1f),
-            icon = Icons.Default.Check,
-            name = "select",
-            onClick = {}
-        )
+//        QuickFeature(
+//            modifier = Modifier.weight(1f),
+//            icon = Icons.Default.Search,
+//            name = "search",
+//            onClick = {}
+//        )
+//        QuickFeature(
+//            modifier = Modifier.weight(1f),
+//            icon = Icons.Default.SortByAlpha,
+//            name = "sort by",
+//            onClick = {}
+//        )
+//
+//        QuickFeature(
+//            modifier = Modifier.weight(1f),
+//            icon = Icons.Default.Check,
+//            name = "select",
+//            onClick = {}
+//        )
         Column(
             modifier = Modifier.weight(2f),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -66,20 +66,20 @@ fun BottomOptions(
         }
     }
 }
-
-@Composable
-fun QuickFeature(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    name: String,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier.padding(start = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(imageVector = icon, contentDescription = "")
-        Text(name)
-    }
-}
+//
+//@Composable
+//fun QuickFeature(
+//    modifier: Modifier = Modifier,
+//    icon: ImageVector,
+//    name: String,
+//    onClick: () -> Unit
+//) {
+//    Column(
+//        modifier = Modifier.padding(start = 20.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ) {
+//        Icon(imageVector = icon, contentDescription = "")
+//        Text(name)
+//    }
+//}

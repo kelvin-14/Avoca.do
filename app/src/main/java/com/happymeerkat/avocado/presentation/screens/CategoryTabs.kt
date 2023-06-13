@@ -26,9 +26,10 @@ import com.happymeerkat.avocado.domain.model.Category
 fun CategoryTabs(
     modifier: Modifier = Modifier,
     categories: List<Category>,
-    addCategory: () -> Unit,
     changeCurrentCategory: (category: Category) -> Unit,
-    currentCategory: Category
+    showEditDialog: () -> Unit,
+    currentCategory: Category,
+    showCreateNewCategoryModal: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -43,8 +44,9 @@ fun CategoryTabs(
                 items(categories){it ->
                     Tab(
                         category = it,
-                        onClick = {changeCurrentCategory(it)},
-                        isCurrent = it == currentCategory
+                        focusOn = {changeCurrentCategory(it)},
+                        isCurrent = it == currentCategory,
+                        showEditDialog = {showEditDialog()}
                     )
                 }
             }
@@ -53,11 +55,8 @@ fun CategoryTabs(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { showCreateNewCategoryModal() }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "")
-            }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "")
             }
         }
     }
@@ -67,13 +66,16 @@ fun CategoryTabs(
 @Composable
 fun Tab(
     category: Category,
-    onClick: () -> Unit,
+    showEditDialog: () -> Unit,
+    focusOn: () -> Unit,
     isCurrent: Boolean
 ) {
     Card(
         modifier = Modifier
             .padding(horizontal = 3.dp)
-            .clickable { onClick() }
+            .clickable {
+                if(isCurrent) showEditDialog() else focusOn()
+            }
     ) {
         Text(
             modifier = Modifier
