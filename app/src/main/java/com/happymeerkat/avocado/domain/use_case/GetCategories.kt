@@ -2,11 +2,13 @@ package com.happymeerkat.avocado.domain.use_case
 
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
+import kotlinx.coroutines.flow.Flow
 
-class CreateCategory(
+class GetCategories(
     private val repo: CategoryRepository
 ) {
-    suspend operator fun invoke(category: Category) {
-        repo.upsertCategory(category)
+    operator fun invoke(): Flow<List<Category>> {
+        return repo.getAllCategories()
     }
 }
+

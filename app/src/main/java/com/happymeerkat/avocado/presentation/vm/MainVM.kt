@@ -22,8 +22,10 @@ class MainVM @Inject constructor(
     private val _mainUIState: MutableStateFlow<MainUIState> = MutableStateFlow(MainUIState())
     val mainUIState: StateFlow<MainUIState> = _mainUIState
     var getListItemsJob: Job? = null
+    var getCategoriesJob: Job? = null
     init {
         getAllListItems()
+        getAllCategories()
     }
     fun getAllListItems() {
         getListItemsJob?.cancel()
@@ -37,9 +39,35 @@ class MainVM @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    fun getAllCategories() {
+        getCategoriesJob?.cancel()
+        getCategoriesJob = listUseCases
+            .getAllCategories()
+            .onEach { listOfCategories ->
+                _mainUIState.value = mainUIState.value.copy(
+                    categories = listOfCategories
+                )
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun changeCurrentCategory(category: Category) {
         _mainUIState.value = mainUIState.value.copy(currentCategory = category)
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
+    }
+
+    sealed interface Response
+    object Success: Response
+    data class Failure (val errorMessage: String): Response
+    fun createNewCategory(category: Category): Response {
+        if (_mainUIState.value.categories.contains(category)) {
+            return Failure("category already exists")
+        }else{
+            viewModelScope.launch {
+                listUseCases.createCategory(category)
+            }
+            return Success
+        }
     }
 
     fun enterEditState() {

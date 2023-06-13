@@ -43,6 +43,7 @@ fun Home(
     val state = viewModel.mainUIState.collectAsState().value
     var editState by remember{ mutableStateOf(false) }
     var editCategory by remember{ mutableStateOf(false) }
+    var createCategory by remember{ mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -52,11 +53,11 @@ fun Home(
         ) {
             CategoryTabs(
                 modifier = Modifier.fillMaxWidth(),
-                categories = mockCategories,
+                categories = state.categories,
                 changeCurrentCategory = {category -> viewModel.changeCurrentCategory(category)},
                 currentCategory = state.currentCategory,
                 showEditDialog = {editCategory = true},
-                showCreateNewCategoryModal = {}
+                showCreateNewCategoryModal = {createCategory = true}
             )
 
             ListScreen(
@@ -97,6 +98,13 @@ fun Home(
                 closeModal = {editCategory = false},
                 category = state.currentCategory,
                 deleteCurrentCategory = {viewModel.deleteCurrentCategory()}
+            )
+        }
+
+        if(createCategory) {
+            CreateCategoryDialog(
+                createCategory = { category: Category -> viewModel.createNewCategory(category) },
+                closeModal = {createCategory = false}
             )
         }
 

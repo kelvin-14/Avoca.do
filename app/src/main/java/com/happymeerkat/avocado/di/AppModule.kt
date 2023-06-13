@@ -12,7 +12,9 @@ import com.happymeerkat.avocado.data.ListDatabase
 import com.happymeerkat.avocado.data.ListRepositoryImpl
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
+import com.happymeerkat.avocado.domain.use_case.CreateCategory
 import com.happymeerkat.avocado.domain.use_case.DeleteCompletedTasks
+import com.happymeerkat.avocado.domain.use_case.GetCategories
 import com.happymeerkat.avocado.domain.use_case.GetItems
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
 import com.happymeerkat.avocado.domain.use_case.UpsertItem
@@ -52,12 +54,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUseCases(
-        repo: ListRepository
+        repo: ListRepository, catRepo: CategoryRepository
     ): ListUseCases {
         return ListUseCases(
             getItems = GetItems(repo),
             upsertItem = UpsertItem(repo),
-            deleteCompletedTasks = DeleteCompletedTasks(repo)
+            deleteCompletedTasks = DeleteCompletedTasks(repo),
+            getAllCategories = GetCategories(catRepo),
+            createCategory = CreateCategory(catRepo)
         )
     }
 
