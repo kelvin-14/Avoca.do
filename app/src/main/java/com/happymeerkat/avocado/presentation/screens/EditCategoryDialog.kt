@@ -60,7 +60,7 @@ fun EditCategoryDialog(
                     TextButton(onClick = { deleteCategoryExt(showConfirmationDialog, closeModal) }) {
                         Text(text = "DELETE CATEGORY", color = Color.Red)
                     }
-                    TextButton(onClick = { editCategoryName(newName) }) {
+                    TextButton(onClick = { editCategoryName(newName); closeModal() }) {
                         Text(text = "SAVE NEW NAME")
                     }
                 }

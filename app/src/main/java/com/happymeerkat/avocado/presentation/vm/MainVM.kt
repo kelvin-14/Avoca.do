@@ -93,9 +93,10 @@ class MainVM @Inject constructor(
     }
 
     fun editCurrentCategoryName(newName: String) {
+        val currentCategoryId = _mainUIState.value.currentCategory.id
         if(!categoryNameExists(newName)) {
             viewModelScope.launch {
-                listUseCases.categoryUpsert(Category(name = newName))
+                listUseCases.categoryUpsert(Category(id = currentCategoryId, name = newName))
             }
         }else {
             Log.d("NAME EXISTS", "NAME EXISTS")
