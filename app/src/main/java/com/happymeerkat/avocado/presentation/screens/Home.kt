@@ -44,6 +44,7 @@ fun Home(
     var editState by remember{ mutableStateOf(false) }
     var editCategory by remember{ mutableStateOf(false) }
     var createCategory by remember{ mutableStateOf(false) }
+    var deleteCategory by remember{ mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -71,7 +72,8 @@ fun Home(
                 navigateToDetails = navigateToDetails,
                 currentCategory = state.currentCategory,
                 completedItems = if(state.currentCategory.name == "All") state.listItems.filter { it.completed }
-                else state.listItems.filter { (it.completed) and (it.category == state.currentCategory.name) }
+                else state.listItems.filter { (it.completed) and (it.category == state.currentCategory.name) },
+                deleteCompletedItems = {viewModel.deleteCompletedTasks()}
             )
 
             if(!editState){
@@ -97,7 +99,7 @@ fun Home(
             EditCategoryDialog(
                 closeModal = {editCategory = false},
                 category = state.currentCategory,
-                deleteCurrentCategory = {viewModel.deleteCurrentCategory()}
+                deleteCurrentCategory = {deleteCategory = true}
             )
         }
 
@@ -105,6 +107,15 @@ fun Home(
             CreateCategoryDialog(
                 createCategory = { category: Category -> viewModel.createNewCategory(category) },
                 closeModal = {createCategory = false}
+            )
+        }
+        
+        if(deleteCategory) {
+            ConfirmationDialog(
+                title = "Delete Category \"${state.currentCategory.name}\" ?",
+                message = "Deleting this category will delete all the tasks associated with it as well",
+                functionToRun = { viewModel.deleteCurrentCategory()},
+                closeModal = { deleteCategory = false }
             )
         }
 

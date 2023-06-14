@@ -14,7 +14,8 @@ fun ListScreen(
     toggleEditState: () -> Unit,
     editState: Boolean,
     navigateToDetails: (title: String, description: String) -> Unit,
-    currentCategory: Category
+    currentCategory: Category,
+    deleteCompletedItems: () -> Unit
 ) {
     Box(modifier = modifier) {
         if((listItems.isEmpty()) and (completedItems.isEmpty())) {
@@ -27,7 +28,8 @@ fun ListScreen(
                 modifier = Modifier.matchParentSize(),
                 listItems = listItems,
                 completedItems = completedItems,
-                navigateToDetails = navigateToDetails
+                navigateToDetails = navigateToDetails,
+                deleteCompletedItems = deleteCompletedItems
             )
         }
 

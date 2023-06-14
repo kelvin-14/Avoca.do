@@ -100,7 +100,9 @@ class MainVM @Inject constructor(
     }
 
     fun deleteCompletedTasks() {
-        // delete all tasks of current category where completed = true
+        viewModelScope.launch {
+            listUseCases.deleteCompletedTasks(_mainUIState.value.currentCategory)
+        }
     }
 
 }
