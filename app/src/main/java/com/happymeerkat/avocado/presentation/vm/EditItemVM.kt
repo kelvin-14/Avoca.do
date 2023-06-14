@@ -47,17 +47,6 @@ class EditItemVM @Inject constructor(
             upsertListItem(item)
         }
     }
-
-
-//    fun collapseCategoryMenu() {
-//        _itemUIState.value = itemUIState.value.copy(categoryExpanded = false)
-//        Log.d("MENU", itemUIState.value.categoryExpanded.toString())
-//    }
-//
-//    fun expandCategoryMenu() {
-//        _itemUIState.value = itemUIState.value.copy(categoryExpanded = true)
-//        Log.d("MENU", itemUIState.value.categoryExpanded.toString())
-//    }
 }
 
 data class ItemUIState(

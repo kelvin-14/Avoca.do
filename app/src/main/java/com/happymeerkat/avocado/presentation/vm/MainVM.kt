@@ -8,6 +8,7 @@ import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -27,7 +28,7 @@ class MainVM @Inject constructor(
         getAllListItems()
         getAllCategories()
     }
-    fun getAllListItems() {
+    private fun getAllListItems() {
         getListItemsJob?.cancel()
         getListItemsJob = listUseCases
             .getItems()
@@ -39,7 +40,7 @@ class MainVM @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun getAllCategories() {
+    private fun getAllCategories() {
         getCategoriesJob?.cancel()
         getCategoriesJob = listUseCases
             .categoryGetAll()
@@ -50,7 +51,13 @@ class MainVM @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
-
+    fun createNewCategory(category: Category) {
+        if (!categoryNameExists(category.name)) {
+            viewModelScope.launch {
+                listUseCases.categoryUpsert(category)
+            }
+        }
+    }
     fun changeCurrentCategory(category: Category) {
         _mainUIState.value = mainUIState.value.copy(currentCategory = category)
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
@@ -59,44 +66,19 @@ class MainVM @Inject constructor(
     fun deleteCurrentCategory() {
         viewModelScope.launch {
             listUseCases.categoryDelete(_mainUIState.value.currentCategory)
+            _mainUIState.value = mainUIState.value.copy(currentCategory = mainUIState.value.categories[0])
         }
     }
 
-    sealed interface Response
-    object Success: Response
-    data class Failure (val errorMessage: String): Response
-    fun createNewCategory(category: Category): Response {
-        if (_mainUIState.value.categories.filter { it.name == category.name }.isNotEmpty()) {
-            return Failure("category already exists")
-        }else{
-            viewModelScope.launch {
-                listUseCases.categoryUpsert(category)
-            }
-            return Success
-        }
-    }
 
-    fun enterEditState() {
-        _mainUIState.value = mainUIState.value.copy(editState = true)
-    }
-
-    fun exitEditState() {
-        _mainUIState.value = mainUIState.value.copy(editState = true)
-    }
-
-    fun completeItem(item: ListItem) {
-        item.completed = true
-    }
-
-    fun undoCompleteItem(item: ListItem) {
-        item.completed = false
-    }
 
     fun editCurrentCategoryName(newName: String) {
         val currentCategoryId = _mainUIState.value.currentCategory.id
         if(!categoryNameExists(newName)) {
             viewModelScope.launch {
+
                 listUseCases.categoryUpsert(Category(id = currentCategoryId, name = newName))
+                _mainUIState.value = mainUIState.value.copy(currentCategory = Category(id = currentCategoryId, name = newName))
             }
         }else {
             Log.d("NAME EXISTS", "NAME EXISTS")

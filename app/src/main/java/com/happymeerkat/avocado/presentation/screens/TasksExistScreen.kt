@@ -27,7 +27,7 @@ fun TasksExistScreen(
     listItems: List<ListItem>,
     completedItems: List<ListItem>,
     navigateToDetails: (title: String, description: String) -> Unit,
-    deleteCompletedItems: () -> Unit
+    showDeleteCompletedItemsDialog: () -> Unit
 ) {
 
     var visible by remember { mutableStateOf(true) }
@@ -54,7 +54,7 @@ fun TasksExistScreen(
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
-                    IconButton(onClick = {deleteCompletedItems()}) {
+                    IconButton(onClick = {showDeleteCompletedItemsDialog()}) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = ""

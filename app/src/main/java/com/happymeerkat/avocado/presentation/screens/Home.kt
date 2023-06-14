@@ -31,6 +31,7 @@ fun Home(
     var editCategory by remember{ mutableStateOf(false) }
     var createCategory by remember{ mutableStateOf(false) }
     var deleteCategory by remember{ mutableStateOf(false) }
+    var deleteCompleted by remember{ mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -53,13 +54,10 @@ fun Home(
                     .weight(1f),
                 listItems = if(state.currentCategory.name == "All") state.listItems.filter { !it.completed }
                 else state.listItems.filter { (!it.completed) and (it.categoryId == state.currentCategory.id) },
-                toggleEditState = { editState = true },
-                editState = editState,
                 navigateToDetails = navigateToDetails,
-                currentCategory = state.currentCategory,
                 completedItems = if(state.currentCategory.name == "All") state.listItems.filter { it.completed }
                 else state.listItems.filter { (it.completed) and (it.categoryId == state.currentCategory.id) },
-                deleteCompletedItems = {viewModel.deleteCompletedTasks()}
+                showDeleteCompletedItemsDialog = {deleteCompleted = true}
             )
 
             if(!editState){
@@ -96,13 +94,22 @@ fun Home(
                 closeModal = {createCategory = false}
             )
         }
-        
+
         if(deleteCategory) {
             ConfirmationDialog(
-                title = "Delete Category \"${state.currentCategory.name}\" ?",
-                message = "Deleting this category will delete all the tasks associated with it as well",
+                title = "Are you sure?",
+                message = "Deleting category \"${state.currentCategory.name}\" will also delete all items associated with it?",
                 functionToRun = { viewModel.deleteCurrentCategory()},
                 closeModal = { deleteCategory = false }
+            )
+        }
+        
+        if(deleteCompleted) {
+            ConfirmationDialog(
+                title = "Are you sure?",
+                message = "Delete completed tasks in category: \"${state.currentCategory.name}\" ?",
+                functionToRun = { viewModel.deleteCompletedTasks()},
+                closeModal = { deleteCompleted = false }
             )
         }
 
