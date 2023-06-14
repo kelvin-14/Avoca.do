@@ -4,7 +4,7 @@ import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetCategories(
+class CategoryGetAll(
     private val repo: CategoryRepository
 ) {
     operator fun invoke(): Flow<List<Category>> {

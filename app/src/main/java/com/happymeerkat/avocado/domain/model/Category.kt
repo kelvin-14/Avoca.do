@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 )
 data class Category(
     @PrimaryKey
+    val id: Int? = null,
     val name: String
 )

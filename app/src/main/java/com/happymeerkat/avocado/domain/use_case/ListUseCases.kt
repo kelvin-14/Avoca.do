@@ -4,7 +4,7 @@ data class ListUseCases(
     val getItems: GetItems,
     val upsertItem: UpsertItem,
     val deleteCompletedTasks: DeleteCompletedTasks,
-    val getAllCategories: GetCategories,
-    val createCategory: CreateCategory,
-    val deleteCategory: DeleteCategory
+    val categoryGetAll: CategoryGetAll,
+    val categoryUpsert: CategoryUpsert,
+    val categoryDelete: CategoryDelete
 )

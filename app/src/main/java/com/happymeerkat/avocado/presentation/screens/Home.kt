@@ -19,20 +19,6 @@ import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.happymeerkat.avocado.presentation.vm.MainVM
 
-
-val mockCategories = listOf(
-    Category("All"),
-    Category("Shopping"),
-    Category("Work"),
-    Category("School"),
-    Category("Church"),
-    Category("Goals")
-)
-
-val mockListItems = listOf(
-    ListItem(title = "mock task", description = "mock desc")
-)
-
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
@@ -66,13 +52,13 @@ fun Home(
                     .fillMaxWidth()
                     .weight(1f),
                 listItems = if(state.currentCategory.name == "All") state.listItems.filter { !it.completed }
-                else state.listItems.filter { (!it.completed) and (it.category == state.currentCategory.name) },
+                else state.listItems.filter { (!it.completed) and (it.categoryId == state.currentCategory.id) },
                 toggleEditState = { editState = true },
                 editState = editState,
                 navigateToDetails = navigateToDetails,
                 currentCategory = state.currentCategory,
                 completedItems = if(state.currentCategory.name == "All") state.listItems.filter { it.completed }
-                else state.listItems.filter { (it.completed) and (it.category == state.currentCategory.name) },
+                else state.listItems.filter { (it.completed) and (it.categoryId == state.currentCategory.id) },
                 deleteCompletedItems = {viewModel.deleteCompletedTasks()}
             )
 
@@ -99,7 +85,8 @@ fun Home(
             EditCategoryDialog(
                 closeModal = {editCategory = false},
                 category = state.currentCategory,
-                deleteCurrentCategory = {deleteCategory = true}
+                showConfirmationDialog = {deleteCategory = true},
+                editCategoryName = {newName -> viewModel.editCurrentCategoryName(newName)}
             )
         }
 

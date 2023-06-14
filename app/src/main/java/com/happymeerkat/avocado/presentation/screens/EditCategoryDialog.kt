@@ -33,9 +33,11 @@ fun EditCategoryDialog(
     modifier: Modifier = Modifier,
     closeModal: () -> Unit,
     category: Category,
-    deleteCurrentCategory: () -> Unit
+    showConfirmationDialog: () -> Unit,
+    editCategoryName: (newName: String) -> Unit
 ) {
-    var currentCategory by remember { mutableStateOf(category.name) }
+    var newName by remember { mutableStateOf(category.name) }
+
     Dialog(onDismissRequest = { closeModal() }) {
         Card(
             modifier = Modifier
@@ -50,15 +52,15 @@ fun EditCategoryDialog(
 
                 Text("EDIT CATEGORY", fontWeight = FontWeight.Bold)
                 Row {
-                    TextField(value = currentCategory, onValueChange = {currentCategory = it})
+                    TextField(value = newName, onValueChange = {newName = it})
                 }
                 Row(
 
                 ) {
-                    TextButton(onClick = { deleteCategoryExt(deleteCurrentCategory, closeModal) }) {
+                    TextButton(onClick = { deleteCategoryExt(showConfirmationDialog, closeModal) }) {
                         Text(text = "DELETE CATEGORY", color = Color.Red)
                     }
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { editCategoryName(newName) }) {
                         Text(text = "SAVE NEW NAME")
                     }
                 }
@@ -68,9 +70,9 @@ fun EditCategoryDialog(
 }
 
 fun deleteCategoryExt(
-    delete: () -> Unit,
+    showConfirmationDialog: () -> Unit,
     closeModal: () -> Unit
 ) {
-    delete()
+    showConfirmationDialog()
     closeModal()
 }

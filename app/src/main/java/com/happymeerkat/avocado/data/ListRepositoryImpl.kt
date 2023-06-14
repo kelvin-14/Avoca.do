@@ -19,10 +19,10 @@ class ListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllCompletedByCategory(category: Category) {
-        listDao.deleteAllCompletedByCategory(category.name)
+        listDao.deleteAllCompletedByCategory(category.id!!)
     }
 
     override suspend fun deleteAllByCategory(category: Category) {
-        listDao.deleteAllByCategory(category.name)
+        listDao.deleteAllByCategory(category.id!!)
     }
 }

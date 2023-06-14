@@ -12,7 +12,7 @@ data class ListItem(
     val id: Int? = null,
     val title: String,
     val description: String? = null,
-    val category: String? = null,
+    val categoryId: Int? = null,
     val dateMade: Long? = null,
     val dateDue: Long? = null,
     var completed: Boolean = false

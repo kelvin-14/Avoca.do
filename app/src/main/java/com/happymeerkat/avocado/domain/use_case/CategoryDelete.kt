@@ -4,7 +4,7 @@ import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
 
-class DeleteCategory(
+class CategoryDelete(
     private val catRepo: CategoryRepository,
     private val listRepo: ListRepository
 ) {

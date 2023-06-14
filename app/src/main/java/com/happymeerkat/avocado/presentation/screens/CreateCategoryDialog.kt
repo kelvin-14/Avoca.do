@@ -52,7 +52,7 @@ fun CreateCategoryDialog(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(onClick = { createCategoryExt(
-                        create = {createCategory(Category(newCategoryName))},
+                        create = {createCategory(Category(name = newCategoryName))},
                         closeModal = closeModal
                     ) }) {
                         Text(text = "CREATE")

@@ -42,7 +42,7 @@ class MainVM @Inject constructor(
     fun getAllCategories() {
         getCategoriesJob?.cancel()
         getCategoriesJob = listUseCases
-            .getAllCategories()
+            .categoryGetAll()
             .onEach { listOfCategories ->
                 _mainUIState.value = mainUIState.value.copy(
                     categories = listOfCategories
@@ -58,7 +58,7 @@ class MainVM @Inject constructor(
 
     fun deleteCurrentCategory() {
         viewModelScope.launch {
-            listUseCases.deleteCategory(_mainUIState.value.currentCategory)
+            listUseCases.categoryDelete(_mainUIState.value.currentCategory)
         }
     }
 
@@ -66,11 +66,11 @@ class MainVM @Inject constructor(
     object Success: Response
     data class Failure (val errorMessage: String): Response
     fun createNewCategory(category: Category): Response {
-        if (_mainUIState.value.categories.contains(category)) {
+        if (_mainUIState.value.categories.filter { it.name == category.name }.isNotEmpty()) {
             return Failure("category already exists")
         }else{
             viewModelScope.launch {
-                listUseCases.createCategory(category)
+                listUseCases.categoryUpsert(category)
             }
             return Success
         }
@@ -92,11 +92,14 @@ class MainVM @Inject constructor(
         item.completed = false
     }
 
-    fun editCurrentCategoryName() {
-        // change category name in db but make sure no such name exists first
-
-        // change category name for all tasks with that name
-
+    fun editCurrentCategoryName(newName: String) {
+        if(!categoryNameExists(newName)) {
+            viewModelScope.launch {
+                listUseCases.categoryUpsert(Category(name = newName))
+            }
+        }else {
+            Log.d("NAME EXISTS", "NAME EXISTS")
+        }
     }
 
     fun deleteCompletedTasks() {
@@ -105,12 +108,16 @@ class MainVM @Inject constructor(
         }
     }
 
+    private fun categoryNameExists(name: String): Boolean {
+        return _mainUIState.value.categories.filter { it.name == name }.isNotEmpty()
+    }
+
 }
 
 data class MainUIState(
     val listItems: List<ListItem> = emptyList() ,
     val listCompletedItems: List<ListItem> = emptyList(),
-    val currentCategory: Category = Category("All"),
+    val currentCategory: Category = Category(name = "All"),
     val categories: List<Category> = emptyList(),
     val selected: Set<Int> = emptySet(), // e.g when deleting, put the id of selected items here
     val editState: Boolean = false,

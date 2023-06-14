@@ -5,17 +5,15 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.happymeerkat.avocado.data.CategoryDao
 import com.happymeerkat.avocado.data.CategoryRepositoryImpl
-import com.happymeerkat.avocado.data.ListDao
 import com.happymeerkat.avocado.data.ListDatabase
 import com.happymeerkat.avocado.data.ListRepositoryImpl
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
-import com.happymeerkat.avocado.domain.use_case.CreateCategory
-import com.happymeerkat.avocado.domain.use_case.DeleteCategory
+import com.happymeerkat.avocado.domain.use_case.CategoryDelete
 import com.happymeerkat.avocado.domain.use_case.DeleteCompletedTasks
-import com.happymeerkat.avocado.domain.use_case.GetCategories
+import com.happymeerkat.avocado.domain.use_case.CategoryGetAll
+import com.happymeerkat.avocado.domain.use_case.CategoryUpsert
 import com.happymeerkat.avocado.domain.use_case.GetItems
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
 import com.happymeerkat.avocado.domain.use_case.UpsertItem
@@ -61,9 +59,9 @@ object AppModule {
             getItems = GetItems(repo),
             upsertItem = UpsertItem(repo),
             deleteCompletedTasks = DeleteCompletedTasks(repo),
-            getAllCategories = GetCategories(catRepo),
-            createCategory = CreateCategory(catRepo),
-            deleteCategory = DeleteCategory(catRepo = catRepo, listRepo = repo)
+            categoryGetAll = CategoryGetAll(catRepo),
+            categoryUpsert = CategoryUpsert(catRepo),
+            categoryDelete = CategoryDelete(catRepo = catRepo, listRepo = repo)
         )
     }
 

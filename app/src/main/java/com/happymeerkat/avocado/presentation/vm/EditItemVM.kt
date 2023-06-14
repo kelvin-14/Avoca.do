@@ -33,7 +33,7 @@ class EditItemVM @Inject constructor(
             val item = ListItem(
                 title = _itemUIState.value.title,
                 description = _itemUIState.value.description,
-                category = category.name, // TODO:change to
+                categoryId = category.id, // TODO:change to
                 dateMade = _itemUIState.value.dateMade,
                 dateDue = _itemUIState.value.dueDate
             )
