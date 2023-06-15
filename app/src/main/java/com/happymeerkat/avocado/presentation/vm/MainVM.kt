@@ -66,7 +66,7 @@ class MainVM @Inject constructor(
     fun deleteCurrentCategory() {
         viewModelScope.launch {
             listUseCases.categoryDelete(_mainUIState.value.currentCategory)
-            _mainUIState.value = mainUIState.value.copy(currentCategory = mainUIState.value.categories[0])
+            _mainUIState.value = mainUIState.value.copy(currentCategory = mainUIState.value.categories.first())
         }
     }
 

@@ -1,13 +1,19 @@
 package com.happymeerkat.avocado.di
 import android.app.Application
+import android.content.ContentValues
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.room.OnConflictStrategy
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.happymeerkat.avocado.data.CategoryRepositoryImpl
 import com.happymeerkat.avocado.data.ListDatabase
 import com.happymeerkat.avocado.data.ListRepositoryImpl
+import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import com.happymeerkat.avocado.domain.use_case.CategoryDelete
@@ -22,6 +28,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -72,7 +80,17 @@ object AppModule {
             app,
             ListDatabase::class.java,
             ListDatabase.DATABASE_NAME,
-        ).fallbackToDestructiveMigration()
+        )
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .addCallback(object : RoomDatabase.Callback() {
+                override fun onCreate(db: SupportSQLiteDatabase) {
+                    super.onCreate(db)
+                    val contentValues = ContentValues()
+                    contentValues.put ("name","All")
+                    db.insert("Category", OnConflictStrategy.IGNORE, contentValues)
+                }
+            })
             .build()
     }
 }
