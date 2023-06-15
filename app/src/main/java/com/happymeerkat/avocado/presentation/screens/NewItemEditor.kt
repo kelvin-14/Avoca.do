@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Menu
@@ -40,7 +41,8 @@ fun NewItemEditor(
     modifier: Modifier = Modifier,
     closeModal: () -> Unit,
     viewModel: EditItemVM = hiltViewModel(),
-    currentCategory: Category
+    currentCategory: Category,
+    showDateDialog: () -> Unit
 ) {
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
@@ -57,7 +59,7 @@ fun NewItemEditor(
                 .align(Alignment.BottomCenter)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().clickable {  }
             ) {
                 TextField(
                     modifier = Modifier
@@ -86,7 +88,9 @@ fun NewItemEditor(
                 }
                 Row(
                     modifier = Modifier
+                        .fillMaxWidth().background(Color.White)
                         .padding(4.dp)
+                        .clickable {  }
                 ){
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
@@ -94,7 +98,7 @@ fun NewItemEditor(
                             contentDescription = ""
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { showDateDialog() }) {
                         Icon(
                             imageVector = Icons.Default.CalendarToday,
                             contentDescription = ""

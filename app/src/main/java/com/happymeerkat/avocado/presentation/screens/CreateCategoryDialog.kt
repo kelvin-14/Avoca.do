@@ -26,6 +26,7 @@ import com.happymeerkat.avocado.domain.model.Category
 fun CreateCategoryDialog(
     modifier: Modifier = Modifier,
     createCategory: (newCategory: Category) -> Unit,
+    changeCurrentActiveCategory: () -> Unit,
     closeModal: () -> Unit
 ) {
     var newCategoryName by remember { mutableStateOf("") }
@@ -52,7 +53,7 @@ fun CreateCategoryDialog(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(onClick = { createCategoryExt(
-                        create = {createCategory(Category(name = newCategoryName))},
+                        create = {createCategory(Category(name = newCategoryName)); changeCurrentActiveCategory()},
                         closeModal = closeModal
                     ) }) {
                         Text(text = "CREATE")

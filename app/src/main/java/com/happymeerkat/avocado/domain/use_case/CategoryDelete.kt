@@ -9,7 +9,9 @@ class CategoryDelete(
     private val listRepo: ListRepository
 ) {
     suspend operator fun invoke(category: Category) {
-        catRepo.deleteCategory(category)
-        listRepo.deleteAllByCategory(category)
+        if(category.name != "All") {
+            catRepo.deleteCategory(category)
+            listRepo.deleteAllByCategory(category)
+        }
     }
 }

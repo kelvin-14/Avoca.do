@@ -46,7 +46,8 @@ class MainVM @Inject constructor(
             .categoryGetAll()
             .onEach { listOfCategories ->
                 _mainUIState.value = mainUIState.value.copy(
-                    categories = listOfCategories
+                    categories = listOfCategories,
+                    currentCategory = listOfCategories.first()
                 )
             }
             .launchIn(viewModelScope)
@@ -59,6 +60,7 @@ class MainVM @Inject constructor(
         }
     }
     fun changeCurrentCategory(category: Category) {
+        Log.d("CHECKER", category.name)
         _mainUIState.value = mainUIState.value.copy(currentCategory = category)
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
     }
@@ -69,8 +71,6 @@ class MainVM @Inject constructor(
             _mainUIState.value = mainUIState.value.copy(currentCategory = mainUIState.value.categories.first())
         }
     }
-
-
 
     fun editCurrentCategoryName(newName: String) {
         val currentCategoryId = _mainUIState.value.currentCategory.id

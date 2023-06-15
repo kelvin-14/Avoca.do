@@ -52,7 +52,7 @@ fun CategoryTabs(
             }
         }
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             IconButton(onClick = { showCreateNewCategoryModal() }) {
@@ -74,7 +74,7 @@ fun Tab(
         modifier = Modifier
             .padding(horizontal = 3.dp)
             .clickable {
-                if(isCurrent) showEditDialog() else focusOn()
+                if((isCurrent) and (category.name != "All")) showEditDialog() else focusOn()
             }
     ) {
         Text(

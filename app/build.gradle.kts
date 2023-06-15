@@ -74,7 +74,6 @@ dependencies {
     val room_version = "2.6.0-alpha01"
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
-    //ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
     // DAGGER HILT
@@ -104,6 +103,10 @@ dependencies {
 
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.0.0-alpha08")
+
+    // Date and time
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    //coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 }
 
 // Allow references to generated code

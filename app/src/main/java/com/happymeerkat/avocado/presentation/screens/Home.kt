@@ -1,11 +1,17 @@
 package com.happymeerkat.avocado.presentation.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,15 +22,23 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
+import com.happymeerkat.avocado.presentation.screens.dateTime.DateDialog
+import com.happymeerkat.avocado.presentation.screens.dateTime.TimeDialog
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.happymeerkat.avocado.presentation.vm.MainVM
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
     navigateToDetails: (title: String, description: String) -> Unit,
-    viewModel: MainVM = hiltViewModel(),
-    editVM: EditItemVM = hiltViewModel()
+    viewModel: MainVM = hiltViewModel()
 ) {
     val state = viewModel.mainUIState.collectAsState().value
     var editState by remember{ mutableStateOf(false) }
@@ -32,6 +46,27 @@ fun Home(
     var createCategory by remember{ mutableStateOf(false) }
     var deleteCategory by remember{ mutableStateOf(false) }
     var deleteCompleted by remember{ mutableStateOf(false) }
+
+    var pickedDate by remember{ mutableStateOf(LocalDate.now()) }
+    var pickedTime by remember{ mutableStateOf(LocalTime.NOON) }
+    val formattedDate by remember {
+        derivedStateOf {
+            DateTimeFormatter
+                .ofPattern("MMM dd yyyy")
+                .format(pickedDate)
+        }
+    }
+
+    val formattedTime by remember {
+        derivedStateOf {
+            DateTimeFormatter
+                .ofPattern("hh:mm")
+                .format(pickedTime)
+        }
+    }
+
+    val dateDialogState = rememberMaterialDialogState()
+    val timeDialogState = rememberMaterialDialogState()
 
     Box(
         modifier = modifier
@@ -75,7 +110,8 @@ fun Home(
                 modifier = modifier
                     .align(Alignment.BottomCenter),
                 closeModal = { editState = false },
-                currentCategory = state.currentCategory
+                currentCategory = state.currentCategory,
+                showDateDialog = {dateDialogState.show()}
             )
         }
 
@@ -91,7 +127,8 @@ fun Home(
         if(createCategory) {
             CreateCategoryDialog(
                 createCategory = { category: Category -> viewModel.createNewCategory(category) },
-                closeModal = {createCategory = false}
+                closeModal = {createCategory = false},
+                changeCurrentActiveCategory = {viewModel.changeCurrentCategory(state.categories.last())}
             )
         }
 
@@ -112,6 +149,11 @@ fun Home(
                 closeModal = { deleteCompleted = false }
             )
         }
+
+        DateDialog(dateDialogState = dateDialogState, changePickedDate = {newDate -> pickedDate = newDate}, openTimeDialog = {timeDialogState.show()})
+        TimeDialog(timeDialogState = timeDialogState, changePickedTime = {newTime ->  pickedTime = newTime})
+
+
 
 
     }
