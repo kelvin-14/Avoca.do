@@ -2,24 +2,29 @@ package com.happymeerkat.avocado.presentation.screens.dateTime
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimeDialog(
     timeDialogState: MaterialDialogState,
-    changePickedTime: (newTime: LocalTime) -> Unit
+    viewModel: EditItemVM = hiltViewModel(),
 ) {
+    var pickedTime by remember{ mutableStateOf(LocalTime.now()) }
     MaterialDialog(
         dialogState = timeDialogState,
         buttons = {
-            positiveButton(text = "Ok")
+            positiveButton(text = "Ok", onClick = {viewModel.setTime(pickedTime)})
             negativeButton(text = "Cancel")
         }
     ) {
@@ -28,7 +33,7 @@ fun TimeDialog(
             initialTime = LocalTime.now(),
             title = "Pick a TIME"
         ) {
-            changePickedTime(it)
+            pickedTime = it
         }
     }
 }

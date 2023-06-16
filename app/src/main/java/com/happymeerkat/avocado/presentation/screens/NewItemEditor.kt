@@ -1,8 +1,8 @@
 package com.happymeerkat.avocado.presentation.screens
 
-import androidx.compose.foundation.BorderStroke
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewItemEditor(
     modifier: Modifier = Modifier,
@@ -59,7 +58,9 @@ fun NewItemEditor(
                 .align(Alignment.BottomCenter)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().clickable {  }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { }
             ) {
                 TextField(
                     modifier = Modifier
@@ -88,9 +89,11 @@ fun NewItemEditor(
                 }
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth().background(Color.White)
+                        .fillMaxWidth()
+                        .background(Color.White)
                         .padding(4.dp)
-                        .clickable {  }
+                        .clickable { },
+                    verticalAlignment = Alignment.CenterVertically
                 ){
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
@@ -104,6 +107,9 @@ fun NewItemEditor(
                             contentDescription = ""
                         )
                     }
+
+                    state.dateDue?.toString()?.let { Text(text = it) }
+                    state.timeDue?.toString()?.let { Text(text = it) }
                 }
             }
 

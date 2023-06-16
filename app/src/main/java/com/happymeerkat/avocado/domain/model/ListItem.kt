@@ -15,5 +15,6 @@ data class ListItem(
     val categoryId: Int? = null,
     val dateMade: Long? = null,
     val dateDue: Long? = null,
+    val timeDue: Long? = null,
     var completed: Boolean = false
 )

@@ -10,7 +10,7 @@ import com.happymeerkat.avocado.domain.model.ListItem
         ListItem::class,
         Category::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class ListDatabase: RoomDatabase() {

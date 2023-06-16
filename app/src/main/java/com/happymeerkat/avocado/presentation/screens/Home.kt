@@ -47,26 +47,13 @@ fun Home(
     var deleteCategory by remember{ mutableStateOf(false) }
     var deleteCompleted by remember{ mutableStateOf(false) }
 
-    var pickedDate by remember{ mutableStateOf(LocalDate.now()) }
-    var pickedTime by remember{ mutableStateOf(LocalTime.NOON) }
-    val formattedDate by remember {
-        derivedStateOf {
-            DateTimeFormatter
-                .ofPattern("MMM dd yyyy")
-                .format(pickedDate)
-        }
-    }
 
-    val formattedTime by remember {
-        derivedStateOf {
-            DateTimeFormatter
-                .ofPattern("hh:mm")
-                .format(pickedTime)
-        }
-    }
+//var pickedDate by remember{ mutableStateOf(LocalDate.now()) }
+//var pickedTime by remember{ mutableStateOf(LocalTime.NOON) }
 
-    val dateDialogState = rememberMaterialDialogState()
-    val timeDialogState = rememberMaterialDialogState()
+
+val dateDialogState = rememberMaterialDialogState()
+val timeDialogState = rememberMaterialDialogState()
 
     Box(
         modifier = modifier
@@ -150,8 +137,8 @@ fun Home(
             )
         }
 
-        DateDialog(dateDialogState = dateDialogState, changePickedDate = {newDate -> pickedDate = newDate}, openTimeDialog = {timeDialogState.show()})
-        TimeDialog(timeDialogState = timeDialogState, changePickedTime = {newTime ->  pickedTime = newTime})
+        DateDialog(dateDialogState = dateDialogState, openTimeDialog = {timeDialogState.show()})
+        TimeDialog(timeDialogState = timeDialogState)
 
 
 
