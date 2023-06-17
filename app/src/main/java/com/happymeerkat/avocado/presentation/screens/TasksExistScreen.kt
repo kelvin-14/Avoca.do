@@ -1,5 +1,8 @@
 package com.happymeerkat.avocado.presentation.screens
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -21,23 +24,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.happymeerkat.avocado.domain.model.ListItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TasksExistScreen(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
     completedItems: List<ListItem>,
-    navigateToDetails: (title: String, description: String) -> Unit,
+    navigateToDetails: (title: String, description: String, categoryId: Int, dateMade: Long, dateDue: Long, timeDue: Long, completed: Boolean) -> Unit,
     showDeleteCompletedItemsDialog: () -> Unit
 ) {
 
-    var visible by remember { mutableStateOf(true) }
+    var visible by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = modifier
     ) {
         listItems.forEach{
             item {
-                ItemView(item = it, navigateToDetails = { navigateToDetails(it.title, it.description ?: "") })
+                ItemView(item = it, navigateToDetails = { navigateToDetails(
+                    it.title,
+                    it.description ?: "",
+                    it.categoryId ?: 0,
+                    it.dateMade ?: 0,
+                    it.dateDue ?: 0,
+                    it.timeDue ?: 0,
+                    it.completed
+                ) })
             }
         }
         item {
@@ -68,7 +80,18 @@ fun TasksExistScreen(
 
             completedItems.forEach{
                 AnimatedVisibility(visible = visible) {
-                    ItemView(item = it, navigateToDetails = { navigateToDetails(it.title, it.description ?: "") })
+                    ItemView(
+                        item = it, navigateToDetails = {
+                            navigateToDetails(
+                                it.title,
+                                it.description ?: "",
+                                it.categoryId ?: 0,
+                                it.dateMade ?: 0,
+                                it.dateDue ?: 0,
+                                it.timeDue ?: 0,
+                                it.completed
+                            )
+                         })
                 }
             }
         }

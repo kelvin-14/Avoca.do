@@ -1,15 +1,34 @@
 package com.happymeerkat.avocado.presentation.navigation
 
-const val ARG1 = "title"
-const val ARG2 = "description"
+import android.util.Log
+
+const val title = "title"
+const val description = "description"
+const val categoryId = "categoryId"
+const val dateMade = "dateMade"
+const val dateDue = "dateDue"
+const val timeDue = "timeDue"
+const val completed = "completed"
+
 sealed class Graph(val route: String) {
     object ROOT: Graph(route = "root_graph")
     object HOME: Graph(route = "home_graph")
-    object DETAILS: Graph(route = "details_graph/{$ARG1}?description={$ARG2}") {
-        fun passDetails(title: String = "", description: String = ""): String{
-            return "details_graph/$title?description=$description"
+    object DETAILS: Graph(
+        route = "details_graph?title={$title}&description={$description}&categoryId={$categoryId}&dateMade={$dateMade}&dateDue={$dateDue}&timeDue={$timeDue}&completed={$completed}"
+    ) {
+        fun passDetails(
+            title: String = "default title",
+            description: String? = "default desc",
+            categoryId: Int = 1,
+            dateMade: Long = 1,
+            dateDue: Long? = 1,
+            timeDue: Long? = 1,
+            completed: Boolean? = false
+        ): String{
+            val out = "details_graph?title=$title&description=$description&categoryId=$categoryId&dateMade=$dateMade&dateDue=$dateDue&timeDue=$timeDue&completed=$completed"
+            Log.d("PASSED DETAILS", out)
+            return out
         }
     }
 
-    object COMPLETED: Graph(route = "completed_graph")
 }
