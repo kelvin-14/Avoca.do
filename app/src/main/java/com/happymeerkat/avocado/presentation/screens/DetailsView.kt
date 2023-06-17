@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.happymeerkat.avocado.presentation.screens.dateTime.DateDialog
+import com.happymeerkat.avocado.presentation.screens.dateTime.TimeDialog
+import com.happymeerkat.avocado.presentation.vm.EditItemVM
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -50,8 +56,13 @@ fun DetailsView(
     dateDue: Long,
     timeDue: Long,
     completed: Boolean,
-    backToHome: () -> Unit
+    backToHome: () -> Unit,
+    viewModel: EditItemVM = hiltViewModel()
 ) {
+
+    val dateDialogState = rememberMaterialDialogState()
+    val timeDialogState = rememberMaterialDialogState()
+
     Scaffold(
         topBar = { DetailsTopAppBar(navigateUp = backToHome) }
     ) {it ->
@@ -81,14 +92,14 @@ fun DetailsView(
                     name = "Due date",
                     icon = Icons.Default.CalendarMonth,
                     detail = if(dateDue.toInt() != 0) LocalDate.ofEpochDay(dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
-                    onClick = { }
+                    onClick = { dateDialogState.show() }
                 )
 
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
                     detail = if(timeDue.toInt() != 0) Instant.ofEpochSecond(timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
-                    onClick = {}
+                    onClick = { timeDialogState.show() }
                 )
 
                 Card(
@@ -113,6 +124,8 @@ fun DetailsView(
                         }
                     }
                 }
+                DateDialog(dateDialogState = dateDialogState, openTimeDialog = {timeDialogState.show()})
+                TimeDialog(timeDialogState = timeDialogState)
             }
         }
     }
@@ -127,7 +140,7 @@ fun DetailCard(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.padding(bottom = 12.dp)
+        modifier = modifier.padding(bottom = 12.dp).clickable { onClick() }
     ) {
         Column(
             modifier = modifier.padding(8.dp)

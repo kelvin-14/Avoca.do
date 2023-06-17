@@ -47,13 +47,8 @@ fun Home(
     var deleteCategory by remember{ mutableStateOf(false) }
     var deleteCompleted by remember{ mutableStateOf(false) }
 
-
-//var pickedDate by remember{ mutableStateOf(LocalDate.now()) }
-//var pickedTime by remember{ mutableStateOf(LocalTime.NOON) }
-
-
-val dateDialogState = rememberMaterialDialogState()
-val timeDialogState = rememberMaterialDialogState()
+    val dateDialogState = rememberMaterialDialogState()
+    val timeDialogState = rememberMaterialDialogState()
 
     Box(
         modifier = modifier
