@@ -65,8 +65,8 @@ fun RootGraph(
                 description = it.arguments?.getString(description),
                 categoryId = it.arguments?.getInt(categoryId) ?: 0,
                 dateMade = it.arguments?.getLong(dateMade) ?: 0,
-                dateDue = it.arguments?.getLong(dateDue),
-                timeDue = it.arguments?.getLong(timeDue),
+                dateDue = it.arguments?.getLong(dateDue) ?: 0,
+                timeDue = it.arguments?.getLong(timeDue) ?:0,
                 completed = it.arguments?.getBoolean(completed) ?: false,
                 backToHome = {navController.navigateUp()}
             )

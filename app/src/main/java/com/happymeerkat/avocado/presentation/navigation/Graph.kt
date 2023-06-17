@@ -18,11 +18,11 @@ sealed class Graph(val route: String) {
     ) {
         fun passDetails(
             title: String = "default title",
-            description: String? = "default desc",
+            description: String?,
             categoryId: Int = 1,
             dateMade: Long = 1,
-            dateDue: Long? = 1,
-            timeDue: Long? = 1,
+            dateDue: Long?,
+            timeDue: Long?,
             completed: Boolean? = false
         ): String{
             val out = "details_graph?title=$title&description=$description&categoryId=$categoryId&dateMade=$dateMade&dateDue=$dateDue&timeDue=$timeDue&completed=$completed"

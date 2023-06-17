@@ -78,7 +78,9 @@ fun NewItemEditor(
                                 closeModalAndSave(
                                     closeModal = closeModal,
                                     save = {viewModel.createNewItem(currentCategory)},
-                                    clearField = {viewModel.editTitle("")}
+                                    clearField = {
+                                        viewModel.clearEditSlate()
+                                    }
                                 )
                         }
                     ),

@@ -29,6 +29,13 @@ class EditItemVM @Inject constructor(
     fun editTitle(newTitle: String) {
         _itemUIState.value = itemUIState.value.copy(title = newTitle)
     }
+    fun clearEditSlate() {
+        _itemUIState.value = itemUIState.value.copy(
+            dateDue = null,
+            title = "",
+            timeDue = null
+        )
+    }
 
     private suspend fun upsertListItem(item: ListItem) {
         listUseCases.upsertItem(item)

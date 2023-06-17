@@ -47,8 +47,8 @@ fun DetailsView(
     description: String?,
     categoryId: Int,
     dateMade: Long,
-    dateDue: Long?,
-    timeDue: Long?,
+    dateDue: Long,
+    timeDue: Long,
     completed: Boolean,
     backToHome: () -> Unit
 ) {
@@ -80,14 +80,14 @@ fun DetailsView(
                 DetailCard(
                     name = "Due date",
                     icon = Icons.Default.CalendarMonth,
-                    detail = dateDue?.let { it1 -> LocalDate.ofEpochDay(it1).format(DateTimeFormatter.ofPattern("EEE, MMM dd")) },
+                    detail = if(dateDue.toInt() != 0) LocalDate.ofEpochDay(dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
                     onClick = { }
                 )
 
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
-                    detail = timeDue?.let { it1 -> Instant.ofEpochSecond(it1).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a")) },
+                    detail = if(timeDue.toInt() != 0) Instant.ofEpochSecond(timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
                     onClick = {}
                 )
 
@@ -123,7 +123,7 @@ fun DetailCard(
     modifier: Modifier = Modifier.fillMaxWidth(),
     icon: ImageVector,
     name: String,
-    detail: String?,
+    detail: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -137,9 +137,7 @@ fun DetailCard(
             Row {
                 Icon(imageVector = icon, contentDescription = null)
                 Spacer(modifier = Modifier.width(5.dp))
-                if (detail != null) {
-                    Text(detail)
-                }
+                Text(detail)
             }
         }
     }
