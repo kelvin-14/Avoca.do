@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowBack
@@ -35,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -77,15 +80,15 @@ fun DetailsView(
                     .fillMaxSize()
                     .padding(horizontal = 18.dp, vertical = 4.dp)
             ) {
-                OutlinedTextField(
-                    modifier = Modifier.background(Color.White),
+                Text(text = "Title", fontSize = 20.sp, modifier = Modifier.padding(start = 8.dp))
+                BasicTextField(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .padding(start = 8.dp),
                     value = state.title,
-                    onValueChange = {},
+                    onValueChange = {viewModel.editTitle(it)},
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.White,
-                    )
+                    textStyle = TextStyle(fontSize = 20.sp)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -95,14 +98,14 @@ fun DetailsView(
                     detail = if(state.dateDue!!.toInt() != 0) LocalDate.ofEpochDay(state.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
                     onClick = { dateDialogState.show() }
                 )
-
+                Spacer(modifier = Modifier.height(12.dp))
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
                     detail = if(state.timeDue!!.toInt() != 0) Instant.ofEpochSecond(state.timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
                     onClick = { timeDialogState.show() }
                 )
-
+                Spacer(modifier = Modifier.height(12.dp))
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,13 +143,10 @@ fun DetailCard(
     detail: String,
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = modifier
-            .padding(bottom = 12.dp)
-            .clickable { onClick() }
-    ) {
         Column(
-            modifier = modifier.padding(8.dp)
+            modifier = modifier
+                .padding(8.dp)
+                .clickable { onClick() }
         ) {
             Text(text = name, fontSize = 20.sp)
             Spacer(modifier = Modifier.height(5.dp))
@@ -156,7 +156,7 @@ fun DetailCard(
                 Text(detail)
             }
         }
-    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
