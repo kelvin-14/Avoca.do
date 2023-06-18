@@ -30,7 +30,7 @@ fun DateDialog(
     MaterialDialog(
         dialogState = dateDialogState,
         buttons = {
-            positiveButton(text = "Ok", onClick = {viewModel.setDate(pickedDate)})
+            positiveButton(text = "Ok", onClick = {viewModel.setDateDue(pickedDate)})
             negativeButton(text = "Cancel")
         }
     ) {

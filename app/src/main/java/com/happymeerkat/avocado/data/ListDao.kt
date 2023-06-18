@@ -13,6 +13,9 @@ interface ListDao {
     @Query("SELECT * FROM list")
     fun getAllListItems(): Flow<List<ListItem>>
 
+    @Query("SELECT * FROM list WHERE id = :id")
+    suspend fun getItemById(id: Int): ListItem?
+
     @Upsert
     suspend fun upsertListItem(item: ListItem)
 

@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -49,19 +50,16 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DetailsView(
     modifier: Modifier = Modifier.fillMaxSize(),
-    title: String,
-    description: String?,
-    categoryId: Int,
-    dateMade: Long,
-    dateDue: Long,
-    timeDue: Long,
-    completed: Boolean,
     backToHome: () -> Unit,
     viewModel: EditItemVM = hiltViewModel()
 ) {
 
+    val state = viewModel.itemUIState.collectAsState().value
+    Log.d("IN THE DETAILS UI", state.toString())
+
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
+
 
     Scaffold(
         topBar = { DetailsTopAppBar(navigateUp = backToHome) }
@@ -75,10 +73,9 @@ fun DetailsView(
                     .fillMaxSize()
                     .padding(horizontal = 18.dp, vertical = 4.dp)
             ) {
-                
                 OutlinedTextField(
                     modifier = Modifier.background(Color.White),
-                    value = title,
+                    value = state.title,
                     onValueChange = {},
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -91,14 +88,14 @@ fun DetailsView(
                 DetailCard(
                     name = "Due date",
                     icon = Icons.Default.CalendarMonth,
-                    detail = if(dateDue.toInt() != 0) LocalDate.ofEpochDay(dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
+                    detail = if(state.dateDue!!.toInt() != 0) LocalDate.ofEpochDay(state.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
                     onClick = { dateDialogState.show() }
                 )
 
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
-                    detail = if(timeDue.toInt() != 0) Instant.ofEpochSecond(timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
+                    detail = if(state.timeDue!!.toInt() != 0) Instant.ofEpochSecond(state.timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
                     onClick = { timeDialogState.show() }
                 )
 
@@ -119,8 +116,8 @@ fun DetailsView(
                             text = "Description",
                             fontSize = 20.sp
                         )
-                        if (description != null) {
-                            Text(description)
+                        if (state.description != "") {
+                            Text(state.description)
                         }
                     }
                 }
@@ -140,7 +137,9 @@ fun DetailCard(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.padding(bottom = 12.dp).clickable { onClick() }
+        modifier = modifier
+            .padding(bottom = 12.dp)
+            .clickable { onClick() }
     ) {
         Column(
             modifier = modifier.padding(8.dp)

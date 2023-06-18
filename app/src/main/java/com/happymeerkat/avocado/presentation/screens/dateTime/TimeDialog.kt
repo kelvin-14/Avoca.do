@@ -24,7 +24,7 @@ fun TimeDialog(
     MaterialDialog(
         dialogState = timeDialogState,
         buttons = {
-            positiveButton(text = "Ok", onClick = {viewModel.setTime(pickedTime)})
+            positiveButton(text = "Ok", onClick = {viewModel.setTimeDue(pickedTime)})
             negativeButton(text = "Cancel")
         }
     ) {

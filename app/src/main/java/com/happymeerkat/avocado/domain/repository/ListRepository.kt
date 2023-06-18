@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
     fun getAllListItems(): Flow<List<ListItem>>
+    suspend fun getItemById(id: Int) : ListItem?
     //fun getAllListItemsByCategory(): Flow<List<ListItem>>
 
     suspend fun upsertItem(listItem: ListItem)

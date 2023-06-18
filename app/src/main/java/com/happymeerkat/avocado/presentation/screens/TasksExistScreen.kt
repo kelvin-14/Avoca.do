@@ -30,7 +30,7 @@ fun TasksExistScreen(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
     completedItems: List<ListItem>,
-    navigateToDetails: (title: String, description: String, categoryId: Int, dateMade: Long, dateDue: Long, timeDue: Long, completed: Boolean) -> Unit,
+    navigateToDetails: (id: Int) -> Unit,
     showDeleteCompletedItemsDialog: () -> Unit
 ) {
 
@@ -41,15 +41,7 @@ fun TasksExistScreen(
     ) {
         listItems.forEach{
             item {
-                ItemView(item = it, navigateToDetails = { navigateToDetails(
-                    it.title,
-                    it.description ?: "",
-                    it.categoryId ?: 0,
-                    it.dateMade ?: 0,
-                    it.dateDue ?: 0,
-                    it.timeDue ?: 0,
-                    it.completed
-                ) })
+                ItemView(item = it, navigateToDetails = { navigateToDetails(it.id!!) })
             }
         }
         item {
@@ -81,17 +73,7 @@ fun TasksExistScreen(
             completedItems.forEach{
                 AnimatedVisibility(visible = visible) {
                     ItemView(
-                        item = it, navigateToDetails = {
-                            navigateToDetails(
-                                it.title,
-                                it.description ?: "",
-                                it.categoryId ?: 0,
-                                it.dateMade ?: 0,
-                                it.dateDue ?: 0,
-                                it.timeDue ?: 0,
-                                it.completed
-                            )
-                         })
+                        item = it, navigateToDetails = { navigateToDetails(it.id!!) })
                 }
             }
         }

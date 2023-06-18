@@ -14,7 +14,7 @@ fun ListScreen(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
     completedItems: List<ListItem>,
-    navigateToDetails: (title: String, description: String,categoryId: Int, dateMade: Long, dateDue: Long, timeDue: Long, completed: Boolean) -> Unit,
+    navigateToDetails: (id : Int) -> Unit,
     showDeleteCompletedItemsDialog: () -> Unit
 ) {
     Box(modifier = modifier) {

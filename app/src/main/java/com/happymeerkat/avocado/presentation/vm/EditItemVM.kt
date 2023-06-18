@@ -3,6 +3,7 @@ package com.happymeerkat.avocado.presentation.vm
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happymeerkat.avocado.domain.model.Category
@@ -13,22 +14,58 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
-import java.time.temporal.ChronoField
 import javax.inject.Inject
 
 @HiltViewModel
 class EditItemVM @Inject constructor(
-    private val listUseCases: ListUseCases
+    private val listUseCases: ListUseCases,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _itemUIState = MutableStateFlow(ItemUIState())
     val itemUIState: StateFlow<ItemUIState> = _itemUIState
+    private var currentItemId: Int? = null
+    init {
+        savedStateHandle.get<Int>("id")?.let {id ->
+            if(id != -1) {
+                viewModelScope.launch {
+                    listUseCases.getItemById(id)?.also {item ->
+                        currentItemId = item.id
+                        _itemUIState.value = itemUIState.value.copy(
+                            title = item.title,
+                            description = item.description ?: "",
+                            categoryId = item.categoryId ?: 1,
+                            dateMade = item.dateMade ?: 0,
+                            dateDue = item.dateDue ?: 0,
+                            timeDue = item.timeDue ?: 0,
+                            completed = item.completed
+                        )
+
+                    }
+                }
+            }
+        }
+    }
 
     fun editTitle(newTitle: String) {
         _itemUIState.value = itemUIState.value.copy(title = newTitle)
     }
+    fun editDescription(newDescription: String) {
+        _itemUIState.value = itemUIState.value.copy(description = newDescription)
+    }
+
+    fun setTimeDue(time: LocalTime) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(LocalDate.now(),ZoneOffset.UTC))
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setDateDue(date: LocalDate) {
+        _itemUIState.value = itemUIState.value.copy(dateDue = date.toEpochDay())
+    }
+
     fun clearEditSlate() {
         _itemUIState.value = itemUIState.value.copy(
             dateDue = null,
@@ -49,9 +86,9 @@ class EditItemVM @Inject constructor(
                     title = _itemUIState.value.title,
                     description = _itemUIState.value.description,
                     categoryId = category.id, // TODO:change to
-                    dateMade = _itemUIState.value.dateMade?.toEpochDay(),
-                    dateDue = _itemUIState.value.dateDue?.toEpochDay(),
-                    timeDue = _itemUIState.value.timeDue?.toEpochSecond(LocalDate.now(),ZoneOffset.UTC)
+                    dateMade = _itemUIState.value.dateMade,
+                    dateDue = _itemUIState.value.dateDue,
+                    timeDue = _itemUIState.value.timeDue
                 )
             } else {
                 TODO("VERSION.SDK_INT < S")
@@ -66,42 +103,16 @@ class EditItemVM @Inject constructor(
             upsertListItem(item)
         }
     }
-
-    fun setTime(time: LocalTime) {
-        _itemUIState.value = itemUIState.value.copy(timeDue = time)
-    }
-
-    fun setDate(date: LocalDate) {
-        _itemUIState.value = itemUIState.value.copy(dateDue = date)
-    }
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun getCurrentTime(): Long {
-//        return LocalDate.now().getLong(ChronoField.INSTANT_SECONDS)
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun changeDateDue(date: LocalDate) {
-//        _itemUIState.value = itemUIState.value.copy(dateDue = date.getLong(ChronoField.INSTANT_SECONDS))
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun changeTimeDue(time: LocalTime) {
-//        _itemUIState.value = itemUIState.value.copy(timeDue = time.getLong(ChronoField.INSTANT_SECONDS))
-//    }
-//
-//    fun showDateDialog() {}
 }
 
 data class ItemUIState(
     val title: String = "",
     val description: String = "",
-    val categoryId: String = "",
-    val dateMade: LocalDate? = null,
-    val dateDue: LocalDate? = null,
-    val timeDue: LocalTime? = null,
-    val completed: Boolean = false,
-    var categoryExpanded: Boolean = false,
+    val categoryId: Int = 1,
+    val dateMade: Long? = 0,
+    val dateDue: Long? = 0,
+    val timeDue: Long? = 0,
+    val completed: Boolean = false
 )
 
 //var pickedDate by remember{ mutableStateOf(LocalDate.now()) }

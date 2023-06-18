@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
-    navigateToDetails: (title: String, description: String,categoryId: Int, dateMade: Long, dateDue: Long, timeDue: Long, completed: Boolean) -> Unit,
+    navigateToDetails: (id : Int) -> Unit,
     viewModel: MainVM = hiltViewModel()
 ) {
     val state = viewModel.mainUIState.collectAsState().value

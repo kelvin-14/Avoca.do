@@ -22,6 +22,10 @@ class ListRepositoryImpl @Inject constructor(
         listDao.deleteAllCompletedByCategory(category.id!!)
     }
 
+    override suspend fun getItemById(id: Int): ListItem? {
+        return listDao.getItemById(id)
+    }
+
     override suspend fun deleteAllByCategory(category: Category) {
         listDao.deleteAllByCategory(category.id!!)
     }
