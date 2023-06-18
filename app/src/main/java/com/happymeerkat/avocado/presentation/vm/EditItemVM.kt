@@ -74,6 +74,7 @@ class EditItemVM @Inject constructor(
         )
     }
 
+
     private suspend fun upsertListItem(item: ListItem) {
         listUseCases.upsertItem(item)
     }
@@ -97,10 +98,24 @@ class EditItemVM @Inject constructor(
         }
     }
 
-    fun updateItem(item: ListItem) {
+    fun updateItem(item: ListItem?) {
         viewModelScope.launch {
-            Log.d("TO BE UPDATED", item.id.toString()+ " " + item.title + " " + item.completed.toString())
-            upsertListItem(item)
+            val currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                ListItem(
+                    id = currentItemId,
+                    title = _itemUIState.value.title,
+                    description = _itemUIState.value.description,
+                    categoryId = currentItemId,
+                    dateMade = _itemUIState.value.dateMade,
+                    dateDue = _itemUIState.value.dateDue,
+                    timeDue = _itemUIState.value.timeDue
+                )
+            } else {
+                TODO("VERSION.SDK_INT < S")
+            }
+            Log.d("CHECKING", item.toString())
+            Log.d("CHECKING", currentItem.toString())
+            upsertListItem(item ?: currentItem)
         }
     }
 }
@@ -115,23 +130,3 @@ data class ItemUIState(
     val completed: Boolean = false
 )
 
-//var pickedDate by remember{ mutableStateOf(LocalDate.now()) }
-//var pickedTime by remember{ mutableStateOf(LocalTime.NOON) }
-//val formattedDate by remember {
-//    derivedStateOf {
-//        DateTimeFormatter
-//            .ofPattern("MMM dd yyyy")
-//            .format(pickedDate)
-//    }
-//}
-//
-//val formattedTime by remember {
-//    derivedStateOf {
-//        DateTimeFormatter
-//            .ofPattern("hh:mm")
-//            .format(pickedTime)
-//    }
-//}
-//
-//val dateDialogState = rememberMaterialDialogState()
-//val timeDialogState = rememberMaterialDialogState()

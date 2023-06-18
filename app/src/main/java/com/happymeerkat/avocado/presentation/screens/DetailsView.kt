@@ -2,6 +2,7 @@ package com.happymeerkat.avocado.presentation.screens
 
 import android.os.Build
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,19 +56,22 @@ fun DetailsView(
 ) {
 
     val state = viewModel.itemUIState.collectAsState().value
-    Log.d("IN THE DETAILS UI", state.toString())
 
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
 
 
     Scaffold(
-        topBar = { DetailsTopAppBar(navigateUp = backToHome) }
+        topBar = { DetailsTopAppBar(navigateUp = backToHome, updateItem = {viewModel.updateItem(null)}) }
     ) {it ->
         Column(
             modifier = modifier
                 .padding(it)
         ) {
+            BackHandler(enabled = true) {
+                backToHome()
+                viewModel.updateItem(null)
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -158,12 +162,13 @@ fun DetailCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopAppBar(
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    updateItem: () -> Unit
 ) {
     TopAppBar(
         title = { /*TODO*/ },
         navigationIcon = {
-                IconButton(onClick = { navigateUp() }) {
+                IconButton(onClick = { navigateUp(); updateItem() }) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
                 }
         },
