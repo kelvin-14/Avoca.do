@@ -1,14 +1,24 @@
 package com.happymeerkat.avocado.presentation.vm
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.app.TaskInfo
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.happymeerkat.avocado.MainActivity
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
+import com.happymeerkat.avocado.notification.AlarmReceiver
+import com.happymeerkat.avocado.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +26,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneOffset
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -80,10 +91,12 @@ class EditItemVM @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun createNewItem(category: Category) {
+    fun createNewItem(category: Category, context: Context) {
         viewModelScope.launch {
             val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val diff = (Date().time/1000) - Constants.sDate
                 ListItem(
+                    id = diff.toInt(),
                     title = _itemUIState.value.title,
                     description = _itemUIState.value.description,
                     categoryId = category.id, // TODO:change to
@@ -94,11 +107,12 @@ class EditItemVM @Inject constructor(
             } else {
                 TODO("VERSION.SDK_INT < S")
             }
+            setAlarm(item, context)
             upsertListItem(item)
         }
     }
 
-    fun updateItem(item: ListItem?) {
+    fun updateItem(item: ListItem?, context: Context) {
         viewModelScope.launch {
             val currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ListItem(
@@ -117,6 +131,25 @@ class EditItemVM @Inject constructor(
             Log.d("CHECKING", currentItem.toString())
             upsertListItem(item ?: currentItem)
         }
+    }
+
+    fun setAlarm(listItem: ListItem, context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        intent.putExtra("list_item", listItem)
+        val pendingIntent = PendingIntent.getBroadcast(context, listItem.id!!, intent, PendingIntent.FLAG_IMMUTABLE)
+        val mainActivityIntent = Intent(context, MainActivity::class.java)
+        val basicPendingIntent = PendingIntent.getActivity(context, listItem.id, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
+        val clockInfo = AlarmManager.AlarmClockInfo(listItem.timeDue!!, basicPendingIntent)
+        alarmManager.setAlarmClock(clockInfo, pendingIntent)
+    }
+
+    private fun removeAlarm(listItem: ListItem, context: Context){
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        intent.putExtra("list_item", listItem)
+        val pendingIntent = PendingIntent.getBroadcast(context, listItem.id!!, intent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.cancel(pendingIntent)
     }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +44,7 @@ fun ItemView(
     navigateToDetails: () -> Unit,
     editVM: EditItemVM = hiltViewModel()
 ) {
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .padding(vertical = 4.dp),
@@ -54,7 +56,7 @@ fun ItemView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(checked = item.completed, onCheckedChange = {
-                    editVM.updateItem(item.copy(completed = !item.completed))
+                    editVM.updateItem(item.copy(completed = !item.completed), context)
                 })
                 Text(text = item.title )
             }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,6 +46,7 @@ fun NewItemEditor(
 ) {
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
+    val context = LocalContext.current
 
     Box(
         modifier = modifier
@@ -77,7 +79,7 @@ fun NewItemEditor(
                             else
                                 closeModalAndSave(
                                     closeModal = closeModal,
-                                    save = {viewModel.createNewItem(currentCategory)},
+                                    save = {viewModel.createNewItem(currentCategory, context)},
                                     clearField = {
                                         viewModel.clearEditSlate()
                                     }

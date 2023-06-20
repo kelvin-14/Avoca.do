@@ -37,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,13 +60,14 @@ fun DetailsView(
 ) {
 
     val state = viewModel.itemUIState.collectAsState().value
+    val context = LocalContext.current
 
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
 
 
     Scaffold(
-        topBar = { DetailsTopAppBar(navigateUp = backToHome, updateItem = {viewModel.updateItem(null)}) }
+        topBar = { DetailsTopAppBar(navigateUp = backToHome, updateItem = {viewModel.updateItem(null, context)}) }
     ) {it ->
         Column(
             modifier = modifier
@@ -73,7 +75,7 @@ fun DetailsView(
         ) {
             BackHandler(enabled = true) {
                 backToHome()
-                viewModel.updateItem(null)
+                viewModel.updateItem(null, context)
             }
             Column(
                 modifier = Modifier
@@ -83,7 +85,6 @@ fun DetailsView(
                 Text(text = "Title", fontSize = 20.sp, modifier = Modifier.padding(start = 8.dp))
                 BasicTextField(
                     modifier = Modifier
-                        .background(Color.White)
                         .padding(start = 8.dp),
                     value = state.title,
                     onValueChange = {viewModel.editTitle(it)},
@@ -175,3 +176,4 @@ fun DetailsTopAppBar(
 
     )
 }
+

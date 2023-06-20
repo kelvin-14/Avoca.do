@@ -107,6 +107,12 @@ dependencies {
     // Date and time
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
     //coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+    // Work Manager
+    val work_version = "2.8.1"
+
+    // Kotlin + coroutines
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 }
 
 // Allow references to generated code
