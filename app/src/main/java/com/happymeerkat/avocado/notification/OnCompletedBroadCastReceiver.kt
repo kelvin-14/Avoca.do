@@ -7,14 +7,15 @@ import androidx.core.app.NotificationManagerCompat
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import com.happymeerkat.avocado.notification.AlarmReceiver.SerializableHelper.serializable
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class OnCompletedBroadCastReceiver @Inject constructor(
-    private val listRepository: ListRepository
-): BroadcastReceiver() {
+@AndroidEntryPoint
+class OnCompletedBroadCastReceiver: BroadcastReceiver() {
+    @Inject lateinit var listRepository: ListRepository
     override fun onReceive(context: Context?, intent: Intent?) {
         val listItem = intent?.serializable("list_item") as? ListItem
         if(listItem != null) {
