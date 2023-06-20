@@ -137,6 +137,7 @@ class EditItemVM @Inject constructor(
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra("list_item", listItem)
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND )
         val pendingIntent = PendingIntent.getBroadcast(context, listItem.id!!, intent, PendingIntent.FLAG_IMMUTABLE)
         val mainActivityIntent = Intent(context, MainActivity::class.java)
         val basicPendingIntent = PendingIntent.getActivity(context, listItem.id, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)

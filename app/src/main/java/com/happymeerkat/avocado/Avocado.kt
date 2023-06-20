@@ -19,7 +19,7 @@ class Avocado(
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "to_do_reminders",
-                "todo_reminder",
+                "to_do_reminders",
                 NotificationManager.IMPORTANCE_HIGH
             )
             channel.description = "used to send notification reminder for a task on the to do list"
