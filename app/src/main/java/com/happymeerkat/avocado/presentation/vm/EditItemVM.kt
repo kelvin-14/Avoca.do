@@ -68,13 +68,14 @@ class EditItemVM @Inject constructor(
 
     fun setTimeDue(time: LocalTime) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(LocalDate.now(),ZoneOffset.UTC))
+            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate,ZoneOffset.UTC))
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setDateDue(date: LocalDate) {
-        _itemUIState.value = itemUIState.value.copy(dateDue = date.toEpochDay())
+        _itemUIState.value = itemUIState.value.copy(dateDue = date.toEpochDay(), selectedDate = date)
+        Log.d("DATE set as selected", _itemUIState.value.selectedDate.toString())
     }
 
     fun clearEditSlate() {
@@ -161,6 +162,7 @@ data class ItemUIState(
     val dateMade: Long? = 0,
     val dateDue: Long? = 0,
     val timeDue: Long? = 0,
-    val completed: Boolean = false
+    val completed: Boolean = false,
+    val selectedDate: LocalDate? = null
 )
 

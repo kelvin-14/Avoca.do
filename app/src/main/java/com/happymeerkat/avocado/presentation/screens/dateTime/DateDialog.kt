@@ -1,6 +1,7 @@
 package com.happymeerkat.avocado.presentation.screens.dateTime
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -38,11 +39,11 @@ fun DateDialog(
         datepicker(
             initialDate = LocalDate.now(),
             title = "Pick a date",
-            allowedDateValidator = { it.dayOfMonth % 2 == 1 }
+            waitForPositiveButton = false // if you don't select this, the function in the text button will have the wrong value
         ) {
             pickedDate = it
         }
-        TextButton(onClick = { openTimeDialog() }) {
+        TextButton(onClick = { viewModel.setDateDue(pickedDate); openTimeDialog(); }) {
             Text("Set time as well", fontSize = 20.sp)
         }
     }

@@ -112,7 +112,7 @@ fun NewItemEditor(
                         )
                     }
 
-                    state.dateDue?.toString()?.let { Text(text = it) }
+                    state.dateDue?.toString()?.let { Text(text = it + "  ") }
                     state.timeDue?.toString()?.let { Text(text = it) }
                 }
             }
