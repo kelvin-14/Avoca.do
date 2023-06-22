@@ -1,15 +1,12 @@
 package com.happymeerkat.avocado.presentation.vm
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.TaskInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,8 +20,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Date
 import javax.inject.Inject
@@ -68,7 +67,8 @@ class EditItemVM @Inject constructor(
 
     fun setTimeDue(time: LocalTime) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate,ZoneOffset.UTC))
+            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate,
+                ZoneId.systemDefault().rules.getOffset(Instant.now())))
         }
     }
 
@@ -142,11 +142,12 @@ class EditItemVM @Inject constructor(
         val pendingIntent = PendingIntent.getBroadcast(context, listItem.id!!, intent, PendingIntent.FLAG_IMMUTABLE)
         val mainActivityIntent = Intent(context, MainActivity::class.java)
         val basicPendingIntent = PendingIntent.getActivity(context, listItem.id, mainActivityIntent, PendingIntent.FLAG_IMMUTABLE)
-        val clockInfo = AlarmManager.AlarmClockInfo(listItem.timeDue!!, basicPendingIntent)
+        Log.d("MILLISECONDS info ", (listItem.timeDue?.times(1000)).toString())
+        val clockInfo = AlarmManager.AlarmClockInfo((listItem.timeDue!!.times(1000)), basicPendingIntent)
         alarmManager.setAlarmClock(clockInfo, pendingIntent)
     }
 
-    private fun removeAlarm(listItem: ListItem, context: Context){
+    fun removeAlarm(listItem: ListItem, context: Context){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra("list_item", listItem)

@@ -70,14 +70,16 @@ fun ItemView(
                         text = LocalDate.ofEpochDay(item.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd")),
                         fontSize = 13.sp
                     )
+
                     Spacer(modifier = Modifier.padding(end = 20.dp))
                     if(item.timeDue != null) {
                         Icon(modifier = Modifier.size(18.dp), imageVector = Icons.Default.AccessTime, contentDescription = "time due")
                         Spacer(modifier = Modifier.width(2.dp))
                         Text(
-                            text = Instant.ofEpochSecond(item.timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a")),
+                            text = Instant.ofEpochSecond(item.timeDue).atZone(ZoneId.systemDefault().rules.getOffset(Instant.now())).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a")),
                             fontSize = 13.sp
                         )
+
                     }
                 }
             }
