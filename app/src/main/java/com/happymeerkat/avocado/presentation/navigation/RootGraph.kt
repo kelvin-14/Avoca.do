@@ -14,7 +14,8 @@ import com.happymeerkat.avocado.presentation.screens.Home
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RootGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    askNotificationsPermission: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -25,6 +26,7 @@ fun RootGraph(
             route = Graph.HOME.route
         ){
             Home(
+                askNotificationsPermission = askNotificationsPermission,
                 navigateToDetails = { id: Int -> navController.navigate(Graph.DETAILS.passDetails(id)) }
             )
         }

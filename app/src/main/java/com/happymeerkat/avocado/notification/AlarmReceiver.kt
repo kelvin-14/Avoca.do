@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.notification
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
@@ -9,9 +10,11 @@ import android.app.PendingIntent.getBroadcast
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.happymeerkat.avocado.MainActivity
@@ -24,7 +27,7 @@ class AlarmReceiver: BroadcastReceiver() {
 
     private var notificationManager: NotificationManagerCompat? = null
 
-    @SuppressLint("MissingPermission")
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val listItem = intent?.serializable("list_item") as? ListItem
 
@@ -52,7 +55,22 @@ class AlarmReceiver: BroadcastReceiver() {
         }
 
         notificationManager = context?.let { NotificationManagerCompat.from(it) }
-        notification?.let { listItem?.let { it1 -> notificationManager?.notify(it1.id!!, it); Log.d("ALARM NOTIF", "notification sent") } }
+        notification?.let { listItem?.let { it1 ->
+            if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+            notificationManager?.notify(it1.id!!, it); Log.d("ALARM NOTIF", "notification sent") } }
     }
 
 

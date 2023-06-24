@@ -6,12 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,25 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.Category
-import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.presentation.screens.dateTime.DateDialog
 import com.happymeerkat.avocado.presentation.screens.dateTime.TimeDialog
-import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.happymeerkat.avocado.presentation.vm.MainVM
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
-    navigateToDetails: (id : Int) -> Unit,
-    viewModel: MainVM = hiltViewModel()
+    navigateToDetails: (id: Int) -> Unit,
+    viewModel: MainVM = hiltViewModel(),
+    askNotificationsPermission: () -> Unit
 ) {
+    askNotificationsPermission();
     val state = viewModel.mainUIState.collectAsState().value
     var editState by remember{ mutableStateOf(false) }
     var editCategory by remember{ mutableStateOf(false) }
