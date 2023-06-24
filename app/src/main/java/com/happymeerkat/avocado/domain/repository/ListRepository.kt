@@ -16,4 +16,5 @@ interface ListRepository {
 
     suspend fun deleteAllCompletedByCategory(category: Category)
     suspend fun deleteAllByCategory(category: Category)
+    suspend fun getActiveAlarms(currentTime: Long): List<ListItem>
 }

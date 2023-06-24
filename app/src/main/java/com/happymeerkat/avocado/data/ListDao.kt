@@ -30,4 +30,7 @@ interface ListDao {
 
     @Query("DELETE FROM list WHERE completed = 1")
     suspend fun deleteAllCompleted()
+
+    @Query("SELECT * FROM list WHERE completed = 0 AND timeDue > :currentTime")
+    suspend fun getActiveAlarms(currentTime: Long): List<ListItem>
 }

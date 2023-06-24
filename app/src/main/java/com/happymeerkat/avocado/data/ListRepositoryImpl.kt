@@ -29,4 +29,8 @@ class ListRepositoryImpl @Inject constructor(
     override suspend fun deleteAllByCategory(category: Category) {
         listDao.deleteAllByCategory(category.id!!)
     }
+
+    override suspend fun getActiveAlarms(currentTime: Long): List<ListItem> {
+        return listDao.getActiveAlarms(currentTime)
+    }
 }

@@ -33,7 +33,6 @@ class MainActivity : ComponentActivity() {
                             permission = android.Manifest.permission.POST_NOTIFICATIONS,
                             isGranted = isGranted
                         )
-
                     }
                 )
 
