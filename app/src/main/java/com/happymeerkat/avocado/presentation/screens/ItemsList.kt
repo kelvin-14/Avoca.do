@@ -5,12 +5,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ListScreen(
+fun ItemsList(
     modifier: Modifier = Modifier,
     listItems: List<ListItem>,
     completedItems: List<ListItem>,

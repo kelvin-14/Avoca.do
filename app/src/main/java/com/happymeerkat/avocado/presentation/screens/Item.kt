@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,12 +32,11 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemView(
+fun Item(
     modifier: Modifier = Modifier.fillMaxWidth(),
     item: ListItem,
     navigateToDetails: () -> Unit,
@@ -66,10 +64,14 @@ fun ItemView(
                 ) {
                     Icon(modifier = Modifier.size(18.dp), imageVector = Icons.Default.CalendarMonth, contentDescription = "date due")
                     Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        text = LocalDate.ofEpochDay(item.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd")),
-                        fontSize = 13.sp
-                    )
+
+                    if(item.dateDue != null) {
+                        Text(
+                            text = LocalDate.ofEpochDay(item.dateDue)
+                                .format(DateTimeFormatter.ofPattern("EEE, MMM dd")),
+                            fontSize = 13.sp
+                        )
+                    }
 
                     Spacer(modifier = Modifier.padding(end = 20.dp))
                     if(item.timeDue != null) {

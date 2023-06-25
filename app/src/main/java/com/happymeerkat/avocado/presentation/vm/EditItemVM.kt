@@ -44,11 +44,11 @@ class EditItemVM @Inject constructor(
                         currentItemId = item.id
                         _itemUIState.value = itemUIState.value.copy(
                             title = item.title,
-                            description = item.description ?: "",
-                            categoryId = item.categoryId ?: 1,
-                            dateMade = item.dateMade ?: 0,
-                            dateDue = item.dateDue ?: 0,
-                            timeDue = item.timeDue ?: 0,
+                            description = item.description,
+                            categoryId = item.categoryId!!,
+                            dateMade = item.dateMade,
+                            dateDue = item.dateDue,
+                            timeDue = item.timeDue,
                             completed = item.completed
                         )
 
@@ -67,7 +67,7 @@ class EditItemVM @Inject constructor(
 
     fun setTimeDue(time: LocalTime) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate,
+            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate ?: LocalDate.ofEpochDay(itemUIState.value.dateDue!!),
                 ZoneId.systemDefault().rules.getOffset(Instant.now())))
         }
     }
@@ -108,7 +108,8 @@ class EditItemVM @Inject constructor(
             } else {
                 TODO("VERSION.SDK_INT < S")
             }
-            setAlarm(item, context)
+            if(item.timeDue != null) setAlarm(item, context)
+
             upsertListItem(item)
         }
     }
@@ -158,11 +159,11 @@ class EditItemVM @Inject constructor(
 
 data class ItemUIState(
     val title: String = "",
-    val description: String = "",
+    val description: String? = null,
     val categoryId: Int = 1,
-    val dateMade: Long? = 0,
-    val dateDue: Long? = 0,
-    val timeDue: Long? = 0,
+    val dateMade: Long? = null,
+    val dateDue: Long? = null,
+    val timeDue: Long? = null,
     val completed: Boolean = false,
     val selectedDate: LocalDate? = null
 )

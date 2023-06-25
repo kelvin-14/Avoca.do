@@ -96,15 +96,16 @@ fun DetailsView(
                 DetailCard(
                     name = "Due date",
                     icon = Icons.Default.CalendarMonth,
-                    detail = if(state.dateDue!!.toInt() != 0) LocalDate.ofEpochDay(state.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
+                    detail = if(state.dateDue != null) LocalDate.ofEpochDay(state.dateDue).format(DateTimeFormatter.ofPattern("EEE, MMM dd"))  else  "Tap to set date",
                     onClick = { dateDialogState.show() }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
-                    detail = if(state.timeDue!!.toInt() != 0) Instant.ofEpochSecond(state.timeDue).atZone(ZoneId.of("UTC")).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))  else "Tap to set time",
-                    onClick = { timeDialogState.show() }
+                    detail = if(state.timeDue != null) Instant.ofEpochSecond(state.timeDue).atZone(ZoneId.systemDefault().rules.getOffset(Instant.now())).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))
+                    else (if (state.dateDue != null) "Tap to set time" else "set date before setting time"),
+                    onClick = { if (state.dateDue != null )timeDialogState.show() else dateDialogState.show()}
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Card(
@@ -124,7 +125,7 @@ fun DetailsView(
                             text = "Description",
                             fontSize = 20.sp
                         )
-                        if (state.description != "") {
+                        if (state.description != null) {
                             Text(state.description)
                         }
                     }

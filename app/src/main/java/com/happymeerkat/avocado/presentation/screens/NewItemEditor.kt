@@ -1,6 +1,7 @@
 package com.happymeerkat.avocado.presentation.screens
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,6 +48,9 @@ fun NewItemEditor(
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
+    BackHandler(enabled = true) {
+        closeModal()
+    }
 
     Box(
         modifier = modifier

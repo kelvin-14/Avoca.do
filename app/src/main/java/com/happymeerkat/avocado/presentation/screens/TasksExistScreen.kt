@@ -41,7 +41,7 @@ fun TasksExistScreen(
     ) {
         listItems.forEach{
             item {
-                ItemView(item = it, navigateToDetails = { navigateToDetails(it.id!!) })
+                Item(item = it, navigateToDetails = { navigateToDetails(it.id!!) })
             }
         }
         item {
@@ -72,7 +72,7 @@ fun TasksExistScreen(
 
             completedItems.forEach{
                 AnimatedVisibility(visible = visible) {
-                    ItemView(
+                    Item(
                         item = it, navigateToDetails = { navigateToDetails(it.id!!) })
                 }
             }

@@ -56,7 +56,7 @@ fun Home(
                 showCreateNewCategoryModal = {createCategory = true}
             )
 
-            ListScreen(
+            ItemsList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
