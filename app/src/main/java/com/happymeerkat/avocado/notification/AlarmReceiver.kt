@@ -44,7 +44,7 @@ class AlarmReceiver: BroadcastReceiver() {
 
         val notification = context?.let {
             NotificationCompat.Builder(it, "to_do_reminders")
-                .setContentTitle("Task Reminder")
+                .setContentTitle(listItem?.title)
                 .setContentText(listItem?.description)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)

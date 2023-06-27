@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnCompletedBroadCastReceiver: BroadcastReceiver() {
-    @Inject lateinit var listRepository: ListRepository
+    private lateinit var listRepository: ListRepository
     override fun onReceive(context: Context?, intent: Intent?) {
         val listItem = intent?.serializable("list_item") as? ListItem
         if(listItem != null) {

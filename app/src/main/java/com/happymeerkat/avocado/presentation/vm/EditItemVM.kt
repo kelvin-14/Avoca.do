@@ -25,6 +25,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
 
@@ -115,6 +116,7 @@ class EditItemVM @Inject constructor(
     }
 
     fun updateItem(item: ListItem?, context: Context) {
+
         viewModelScope.launch {
             val currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ListItem(
@@ -129,9 +131,21 @@ class EditItemVM @Inject constructor(
             } else {
                 TODO("VERSION.SDK_INT < S")
             }
-            Log.d("CHECKING", item.toString())
-            Log.d("CHECKING", currentItem.toString())
+            removeAlarm(currentItem, context)
+            if(currentItem.timeDue != null) {
+                setAlarm(currentItem, context)
+            }
+
             upsertListItem(item ?: currentItem)
+        }
+    }
+
+    fun markCompleted(item: ListItem, context: Context?) {
+        viewModelScope.launch {
+            upsertListItem(item)
+            if(item.timeDue != null) {
+                removeAlarm(item, context!!)
+            }
         }
     }
 
@@ -154,6 +168,18 @@ class EditItemVM @Inject constructor(
         intent.putExtra("list_item", listItem)
         val pendingIntent = PendingIntent.getBroadcast(context, listItem.id!!, intent, PendingIntent.FLAG_IMMUTABLE)
         alarmManager.cancel(pendingIntent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getFormattedTime(time: Long): String {
+        return Instant.ofEpochSecond(time).atZone(ZoneId.systemDefault().rules.getOffset(Instant.now())).toLocalTime().format(
+            DateTimeFormatter.ofPattern("hh:mm a"))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getFormattedDate(date: Long): String {
+        return LocalDate.ofEpochDay(date)
+            .format(DateTimeFormatter.ofPattern("EEE, MMM dd"))
     }
 }
 

@@ -21,9 +21,9 @@ import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
 @AndroidEntryPoint
-class RebootBroadcastReceiver @Inject constructor(
-): BroadcastReceiver() {
-    @Inject lateinit var repository: ListRepository
+class RebootBroadcastReceiver: BroadcastReceiver() {
+
+    private lateinit var repository: ListRepository
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context?, intent: Intent?) {
         val time =

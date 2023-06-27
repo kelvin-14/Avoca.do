@@ -8,8 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.happymeerkat.avocado.presentation.screens.DetailsView
-import com.happymeerkat.avocado.presentation.screens.Home
+import com.happymeerkat.avocado.presentation.screens.details.DetailsView
+import com.happymeerkat.avocado.presentation.screens.home.Home
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
