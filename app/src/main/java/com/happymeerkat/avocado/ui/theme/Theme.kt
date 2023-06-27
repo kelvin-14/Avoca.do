@@ -2,6 +2,7 @@ package com.happymeerkat.avocado.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -19,29 +20,24 @@ private val DarkColorScheme = darkColorScheme(
     primary = ThemeColors.Dark.primary,
     onPrimary = ThemeColors.Dark.text,
     surface = ThemeColors.Dark.surface,
-    background = ThemeColors.Dark.background
+    background = ThemeColors.Dark.background,
+    error = ThemeColors.Dark.error
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = ThemeColors.Light.primary,
     onPrimary = ThemeColors.Light.text,
     surface = ThemeColors.Light.surface,
-    background = ThemeColors.Light.background
+    background = ThemeColors.Light.background,
+    error = ThemeColors.Light.error
 )
 
 @Composable
 fun AvocadoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -49,8 +45,11 @@ fun AvocadoTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            window.navigationBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+
         }
     }
 

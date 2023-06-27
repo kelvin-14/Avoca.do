@@ -3,6 +3,7 @@ package com.happymeerkat.avocado.presentation.screens.home
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.happymeerkat.avocado.domain.model.ListItem
 
@@ -52,7 +54,7 @@ fun TasksExistScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Completed")
+                    Text(modifier = Modifier.padding(start = 8.dp), text = "Completed")
                     IconButton(onClick = { visible = !visible}) {
                         Icon(
                             imageVector = if(visible) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
@@ -60,12 +62,12 @@ fun TasksExistScreen(
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
-                    IconButton(onClick = {showDeleteCompletedItemsDialog()}) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = ""
-                        )
-                    }
+//                    IconButton(onClick = {showDeleteCompletedItemsDialog()}) {
+//                        Icon(
+//                            imageVector = Icons.Default.Delete,
+//                            contentDescription = ""
+//                        )
+//                    }
                 }
             }
         }

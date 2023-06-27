@@ -36,8 +36,7 @@ fun CategoryTabs(
     ) {
         Column(
             modifier = Modifier
-                .weight(4f)
-                .padding(vertical = 4.dp)
+                .weight(8f)
         ) {
             LazyRow {
                 items(categories){it ->
@@ -50,14 +49,15 @@ fun CategoryTabs(
                 }
             }
         }
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            IconButton(onClick = { showCreateNewCategoryModal() }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "")
-            }
-        }
+//        Row(
+//            modifier = Modifier.weight(1f),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            IconButton(onClick = { showCreateNewCategoryModal() }) {
+//                Icon(imageVector = Icons.Default.Add, contentDescription = "")
+//            }
+//        }
     }
 
 }

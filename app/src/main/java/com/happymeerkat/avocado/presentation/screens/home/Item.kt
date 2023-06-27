@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,7 +58,9 @@ fun Item(
         onClick = { navigateToDetails() }
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -67,7 +70,7 @@ fun Item(
                 Checkbox(
                     checked = item.completed,
                     onCheckedChange = {viewModel.markCompleted(item.copy(completed = !item.completed), context)},
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
@@ -84,7 +87,8 @@ fun Item(
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 6.dp),
                         text = item.title,
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 if(item.dateDue != null) {

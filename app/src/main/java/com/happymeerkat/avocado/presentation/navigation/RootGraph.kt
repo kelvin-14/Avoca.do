@@ -2,7 +2,10 @@ package com.happymeerkat.avocado.presentation.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,6 +17,7 @@ import com.happymeerkat.avocado.presentation.screens.home.Home
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RootGraph(
+    modifier: Modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
     navController: NavHostController,
     askNotificationsPermission: () -> Unit
 ) {
