@@ -126,7 +126,8 @@ class EditItemVM @Inject constructor(
                     categoryId = currentItemId,
                     dateMade = _itemUIState.value.dateMade,
                     dateDue = _itemUIState.value.dateDue,
-                    timeDue = _itemUIState.value.timeDue
+                    timeDue = _itemUIState.value.timeDue,
+                    completed = _itemUIState.value.completed
                 )
             } else {
                 TODO("VERSION.SDK_INT < S")

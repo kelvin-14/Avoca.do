@@ -109,7 +109,6 @@ fun Item(
                                 icon = Icons.Default.AccessTime,
                                 text = viewModel.getFormattedTime(item.timeDue)
                             )
-
                         }
                     }
                 }

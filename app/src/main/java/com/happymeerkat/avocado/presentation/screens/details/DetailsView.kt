@@ -3,9 +3,9 @@ package com.happymeerkat.avocado.presentation.screens.details
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,16 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,12 +26,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,10 +41,6 @@ import com.happymeerkat.avocado.presentation.screens.dialog.DateDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -65,7 +58,13 @@ fun DetailsView(
 
 
     Scaffold(
-        topBar = { DetailsTopAppBar(navigateUp = backToHome, updateItem = {viewModel.updateItem(null, context)}) }
+        topBar = {
+            DetailsTopAppBar(
+                modifier = Modifier.fillMaxWidth().background(Color.Red),
+                navigateUp = backToHome,
+                updateItem = {viewModel.updateItem(null, context)}
+            )
+        }
     ) {it ->
         Column(
             modifier = modifier
@@ -103,7 +102,12 @@ fun DetailsView(
 //                        onValueChange = { viewModel.editDescription(it) },
 //                        textStyle = MaterialTheme.typography.bodyLarge,
 //                    )
-                    OutlinedTextField(value = state.description ?: "", onValueChange = { viewModel.editDescription(it) }, maxLines = 10)
+                    OutlinedTextField(
+                        value = state.description ?: "",
+                        onValueChange = { viewModel.editDescription(it) },
+                        maxLines = 10,
+                        placeholder = {Text("Write some notes")}
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -158,16 +162,25 @@ fun DetailCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsTopAppBar(
+    modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     updateItem: () -> Unit
 ) {
     TopAppBar(
+        modifier = modifier,
         title = { /*TODO*/ },
         navigationIcon = {
                 IconButton(onClick = { navigateUp(); updateItem() }) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
                 }
         },
+        colors = topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+        )
 
     )
 }
