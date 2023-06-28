@@ -4,36 +4,33 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +39,7 @@ import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailsView(
@@ -77,18 +75,21 @@ fun DetailsView(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 18.dp, vertical = 4.dp)
+                    .padding(start = 22.dp)
             ) {
                 BasicTextField(
                     modifier = Modifier
-                        .padding(start = 8.dp),
+                        .padding(top = 6.dp, bottom = 24.dp)
+                        .wrapContentWidth(),
                     value = state.title,
                     onValueChange = { viewModel.editTitle(it) },
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.headlineLarge
+                    textStyle = MaterialTheme.typography.headlineLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
+                    maxLines = 5,
+                    singleLine = false,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
                 Column(
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
@@ -96,28 +97,34 @@ fun DetailsView(
                         fontSize = 20.sp
                     )
 
-//                    BasicTextField(
-//                        modifier = Modifier,
-//                        value = state.description ?: "",
-//                        onValueChange = { viewModel.editDescription(it) },
-//                        textStyle = MaterialTheme.typography.bodyLarge,
-//                    )
-                    OutlinedTextField(
+                    TextField(
                         value = state.description ?: "",
                         onValueChange = { viewModel.editDescription(it) },
                         maxLines = 10,
-                        placeholder = {Text("Write some notes")}
+                        placeholder = {Text("Write some notes...")},
+                        colors = textFieldColors(
+                            focusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.background,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+                            cursorColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
+                        enabled = true
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+
                 DetailCard(
                     name = "Due date",
                     icon = Icons.Default.CalendarMonth,
                     detail = if (state.dateDue != null) viewModel.getFormattedDate(state.dateDue) else "Tap to set date",
                     onClick = { dateDialogState.show() }
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 DetailCard(
                     name = "Time due",
                     icon = Icons.Default.AccessTime,
@@ -125,7 +132,6 @@ fun DetailsView(
                     else (if (state.dateDue != null) "Tap to set time" else "set date before setting time"),
                     onClick = { if (state.dateDue != null) timeDialogState.show() else dateDialogState.show() }
                 )
-                Spacer(modifier = Modifier.height(12.dp))
 
 
                 DateDialog(dateDialogState = dateDialogState, openTimeDialog = {timeDialogState.show()})
@@ -135,53 +141,7 @@ fun DetailsView(
     }
 }
 
-@Composable
-fun DetailCard(
-    modifier: Modifier = Modifier.fillMaxWidth(),
-    icon: ImageVector,
-    name: String,
-    detail: String,
-    onClick: () -> Unit
-) {
-        Column(
-            modifier = modifier
-                .padding(8.dp)
-                .clickable { onClick() }
-        ) {
-            Text(text = name, fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(5.dp))
-            Row {
-                Icon(imageVector = icon, contentDescription = null)
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(detail)
-            }
-        }
 
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DetailsTopAppBar(
-    modifier: Modifier = Modifier,
-    navigateUp: () -> Unit,
-    updateItem: () -> Unit
-) {
-    TopAppBar(
-        modifier = modifier,
-        title = { /*TODO*/ },
-        navigationIcon = {
-                IconButton(onClick = { navigateUp(); updateItem() }) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
-                }
-        },
-        colors = topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            scrolledContainerColor = MaterialTheme.colorScheme.background,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-        )
 
-    )
-}
 

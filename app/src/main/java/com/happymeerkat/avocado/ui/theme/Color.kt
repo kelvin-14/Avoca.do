@@ -18,6 +18,9 @@ val White = Color(0xFFd6d6d4)
 
 // Dark options
 val DarkBlueGreen = Color(0xff213555)
+//4c6ea8
+//213555
+//3b5480
 
 val ErrorRed = Color(0xffcf5132)
 

@@ -34,6 +34,7 @@ import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.ConfirmationDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.CreateCategoryDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.EditCategoryDialog
+import com.happymeerkat.avocado.presentation.screens.dialog.MenuDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.NewItemEditor
 import com.happymeerkat.avocado.presentation.vm.MainVM
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -53,6 +54,7 @@ fun Home(
     var createCategory by remember{ mutableStateOf(false) }
     var deleteCategory by remember{ mutableStateOf(false) }
     var deleteCompleted by remember{ mutableStateOf(false) }
+    var showMenu by remember{ mutableStateOf(false) }
 
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
@@ -84,7 +86,7 @@ fun Home(
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { showMenu = !showMenu }) {
                         Icon(imageVector = Icons.Default.MoreVert, contentDescription = "more options")
                     }
                 }
@@ -119,7 +121,6 @@ fun Home(
                 )
             }
         }
-
 
         if(editState){
             NewItemEditor(
@@ -166,11 +167,15 @@ fun Home(
             )
         }
 
+        if(showMenu) {
+            MenuDialog(
+                expanded = showMenu,
+                toggleExpandedState = {showMenu = !showMenu},
+                showCreateNewCategoryModal = { createCategory = true }
+            )
+        }
+
         DateDialog(dateDialogState = dateDialogState, openTimeDialog = {timeDialogState.show()})
         TimeDialog(timeDialogState = timeDialogState)
-
-
-
-
     }
 }

@@ -3,8 +3,10 @@ package com.happymeerkat.avocado.presentation.screens.home
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +45,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun Item(
     modifier: Modifier = Modifier.fillMaxWidth(),
@@ -54,8 +56,11 @@ fun Item(
     val context = LocalContext.current
     Card(
         modifier = modifier
-            .padding(vertical = 4.dp),
-        onClick = { navigateToDetails() }
+            .padding(vertical = 4.dp)
+            .combinedClickable (
+                onClick = {navigateToDetails()},
+                onLongClick = { Log.d("LONG CLICK", "long click") }
+            )
     ) {
         Row(
             modifier = Modifier
@@ -65,7 +70,8 @@ fun Item(
         ) {
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
             ) {
                 Checkbox(
                     checked = item.completed,
