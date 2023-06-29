@@ -123,7 +123,7 @@ class EditItemVM @Inject constructor(
                     id = currentItemId,
                     title = _itemUIState.value.title,
                     description = _itemUIState.value.description,
-                    categoryId = currentItemId,
+                    categoryId = _itemUIState.value.categoryId,
                     dateMade = _itemUIState.value.dateMade,
                     dateDue = _itemUIState.value.dateDue,
                     timeDue = _itemUIState.value.timeDue,
