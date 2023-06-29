@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,8 +58,8 @@ fun Item(
     Card(
         modifier = modifier
             .padding(vertical = 4.dp)
-            .combinedClickable (
-                onClick = {navigateToDetails()},
+            .combinedClickable(
+                onClick = { navigateToDetails() },
                 onLongClick = { Log.d("LONG CLICK", "long click") }
             )
     ) {
@@ -77,6 +78,7 @@ fun Item(
                     checked = item.completed,
                     onCheckedChange = {viewModel.markCompleted(item.copy(completed = !item.completed), context)},
                     modifier = Modifier.fillMaxSize(),
+                    colors = CheckboxDefaults.colors(uncheckedColor = MaterialTheme.colorScheme.onPrimary )
                 )
             }
 
@@ -86,6 +88,7 @@ fun Item(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
+
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -97,6 +100,7 @@ fun Item(
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
+
                 if(item.dateDue != null) {
                     Row(
                         modifier = Modifier
@@ -108,7 +112,9 @@ fun Item(
                             icon = Icons.Default.CalendarMonth,
                             text = viewModel.getFormattedDate(item.dateDue)
                         )
+
                         Spacer(modifier = Modifier.width(25.dp))
+
                         if(item.timeDue != null) {
                             TimeDetail(
                                 modifier = Modifier.weight(1f),
@@ -118,6 +124,7 @@ fun Item(
                         }
                     }
                 }
+
             }
         }
     }
@@ -132,11 +139,19 @@ fun TimeDetail(
     description: String = ""
 ) {
     Row {
-        Icon(modifier = Modifier.size(18.dp), imageVector = icon, contentDescription = description)
+        Icon(
+            modifier = Modifier.size(18.dp),
+            imageVector = icon,
+            contentDescription = description,
+            tint = MaterialTheme.colorScheme.onPrimary
+        )
+
         Spacer(modifier = Modifier.width(2.dp))
+
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

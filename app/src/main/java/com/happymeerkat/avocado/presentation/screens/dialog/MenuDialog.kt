@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TipsAndUpdates
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -27,24 +30,28 @@ fun MenuDialog(
     modifier: Modifier = Modifier,
     expanded: Boolean,
     toggleExpandedState: () -> Unit,
-    showCreateNewCategoryModal: () -> Unit
+    showCreateNewCategoryModal: () -> Unit,
+    showDeleteCategoryModal: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.1f))
             .wrapContentSize(Alignment.TopEnd)
-            .padding(end = 38.dp, top = 35.dp)
+            .padding(end = 28.dp, top = 25.dp)
 
     ) {
         DropdownMenu(
-            modifier = Modifier.background(Color(0xfffffded)),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             expanded = expanded,
             onDismissRequest = { toggleExpandedState() }
         ) {
-            MenuItem(name = "new list group", icon = Icons.Default.Add, closeMenu = { toggleExpandedState() }, onClick = { showCreateNewCategoryModal() })
-            MenuItem(name = "Tips", icon = Icons.Default.TipsAndUpdates, closeMenu = { toggleExpandedState() }, onClick = {})
-            MenuItem(name = "Dark Mode", icon = Icons.Default.DarkMode, closeMenu = { toggleExpandedState() }, onClick = {})
+            MenuItem(name = "new category", icon = Icons.Default.Add, closeMenu = { toggleExpandedState() }, onClick = { showCreateNewCategoryModal() })
+            MenuItem(name = "Tips", icon = Icons.Default.TipsAndUpdates, closeMenu = {  }, onClick = {})
+            MenuItem(name = "Dark Mode", icon = Icons.Default.DarkMode, closeMenu = {  }, onClick = {})
+            MenuItem(name = "Delete completed tasks", icon = Icons.Default.Delete, closeMenu = {  }, onClick = {})
+            MenuItem(name = "Delete category", icon = Icons.Default.DeleteForever, closeMenu = { toggleExpandedState() }, onClick = { showDeleteCategoryModal() })
+            MenuItem(name = "Settings", icon = Icons.Default.Settings, closeMenu = {  }, onClick = {})
 
         }
     }

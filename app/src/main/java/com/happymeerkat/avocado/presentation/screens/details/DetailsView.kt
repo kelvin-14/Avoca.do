@@ -92,7 +92,7 @@ fun DetailsView(
                     modifier = Modifier
                 ) {
                     Text(
-                        modifier = Modifier.padding(bottom = 5.dp),
+                        modifier = Modifier,
                         text = "Notes",
                         fontSize = 20.sp
                     )
@@ -123,7 +123,7 @@ fun DetailsView(
                     onClick = { dateDialogState.show() }
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 DetailCard(
                     name = "Time due",

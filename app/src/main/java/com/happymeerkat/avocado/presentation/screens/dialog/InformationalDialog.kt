@@ -15,16 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun ConfirmationDialog(
-    title: String,
+fun InformationalDialog(
+    title: String?,
     message: String,
-    functionToRun: () -> Unit,
     closeModal: () -> Unit
 ) {
     Dialog(onDismissRequest = { closeModal() }) {
@@ -39,36 +37,27 @@ fun ConfirmationDialog(
                     .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                if(title != null) {
+                    Text(
+                        modifier = Modifier.padding(vertical = 12.dp),
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
                 Row(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(message, lineHeight = 30.sp)
                 }
                 Row(
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = { closeModal() }) {
-                        Text(text = "CANCEL", color = Color.Red)
-                    }
-                    Spacer(modifier = Modifier.weight(0.5f))
-                    TextButton(onClick = { deleteThenClose(functionToRun, closeModal) }) {
                         Text(text = "OK", color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
             }
         }
     }
-}
-
-fun deleteThenClose(
-    func: () -> Unit,
-    close: () -> Unit
-) {
-    func()
-    close()
 }

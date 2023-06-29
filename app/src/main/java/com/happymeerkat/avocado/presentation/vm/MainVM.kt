@@ -53,7 +53,7 @@ class MainVM @Inject constructor(
             .launchIn(viewModelScope)
     }
     fun createNewCategory(category: Category) {
-        if (!categoryNameExists(category.name)) {
+        if (category.name != "" && !categoryNameExists(category.name)) {
             viewModelScope.launch {
                 listUseCases.categoryUpsert(category)
             }

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,9 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.happymeerkat.avocado.R
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.presentation.screens.category.CategoryTabs
 import com.happymeerkat.avocado.presentation.screens.dialog.DateDialog
@@ -34,6 +38,7 @@ import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.ConfirmationDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.CreateCategoryDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.EditCategoryDialog
+import com.happymeerkat.avocado.presentation.screens.dialog.InformationalDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.MenuDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.NewItemEditor
 import com.happymeerkat.avocado.presentation.vm.MainVM
@@ -113,12 +118,18 @@ fun Home(
                 currentCategory = state.currentCategory
             )
 
-            if(!editState){
-                BottomOptions(
-                    toggleEditState = { editState = true },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+        }
+
+        if(!editState){
+            FloatingActionButton(
+                modifier = Modifier
+                    .padding(end = 30.dp, bottom = 60.dp, top = 10.dp)
+                    .align(Alignment.BottomEnd),
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.background,
+                onClick = { editState = true }
+            ) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "")
             }
         }
 
@@ -145,17 +156,24 @@ fun Home(
             CreateCategoryDialog(
                 createCategory = { category: Category -> viewModel.createNewCategory(category) },
                 closeModal = {createCategory = false},
-                changeCurrentActiveCategory = {viewModel.changeCurrentCategory(state.categories.last())}
+                changeCurrentActiveCategory = { viewModel.changeCurrentCategory(state.categories.last()) }
             )
         }
 
         if(deleteCategory) {
-            ConfirmationDialog(
-                title = "Are you sure?",
-                message = "Deleting category \"${state.currentCategory.name}\" will also delete all items associated with it?",
-                functionToRun = { viewModel.deleteCurrentCategory()},
-                closeModal = { deleteCategory = false }
-            )
+            val defaultCategoryMessage = "The default category cannot be deleted"
+            val restCategoryMessage = "Deleting category \"${state.currentCategory.name}\" will also delete all items associated with it?"
+
+            if(state.currentCategory.name == stringResource(id = R.string.default_category_name)) {
+                InformationalDialog(title = null, message = defaultCategoryMessage, closeModal = { deleteCategory = false })
+            } else {
+                ConfirmationDialog(
+                    title = "Are you sure?",
+                    message = restCategoryMessage,
+                    functionToRun = { viewModel.deleteCurrentCategory()},
+                    closeModal = { deleteCategory = false }
+                )
+            }
         }
         
         if(deleteCompleted) {
@@ -171,7 +189,8 @@ fun Home(
             MenuDialog(
                 expanded = showMenu,
                 toggleExpandedState = {showMenu = !showMenu},
-                showCreateNewCategoryModal = { createCategory = true }
+                showCreateNewCategoryModal = { createCategory = true },
+                showDeleteCategoryModal = { deleteCategory = true }
             )
         }
 
