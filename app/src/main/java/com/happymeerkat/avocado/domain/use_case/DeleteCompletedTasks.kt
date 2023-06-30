@@ -7,7 +7,7 @@ class DeleteCompletedTasks(
     private val repository: ListRepository
 ) {
     suspend operator fun invoke(category: Category) {
-        if(category.name == "All") {
+        if(category.id == 1) {
             repository.deleteAllCompleted()
         }else{
             repository.deleteAllCompletedByCategory(category)

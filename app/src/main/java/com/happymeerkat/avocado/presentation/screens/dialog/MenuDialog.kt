@@ -24,14 +24,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.happymeerkat.avocado.domain.use_case.DeleteCompletedTasks
 
 @Composable
 fun MenuDialog(
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    toggleExpandedState: () -> Unit,
+    closeMenu: () -> Unit,
     showCreateNewCategoryModal: () -> Unit,
-    showDeleteCategoryModal: () -> Unit
+    showDeleteCategoryModal: () -> Unit,
+    showDeleteCompletedTasksModal: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -44,15 +46,14 @@ fun MenuDialog(
         DropdownMenu(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
             expanded = expanded,
-            onDismissRequest = { toggleExpandedState() }
+            onDismissRequest = { closeMenu() }
         ) {
-            MenuItem(name = "new category", icon = Icons.Default.Add, closeMenu = { toggleExpandedState() }, onClick = { showCreateNewCategoryModal() })
-            MenuItem(name = "Tips", icon = Icons.Default.TipsAndUpdates, closeMenu = {  }, onClick = {})
+            MenuItem(name = "new category", icon = Icons.Default.Add, closeMenu = { closeMenu() }, onClick = { showCreateNewCategoryModal() })
+            // MenuItem(name = "Tips", icon = Icons.Default.TipsAndUpdates, closeMenu = {  }, onClick = {}) TODO: Put this in settings
             MenuItem(name = "Dark Mode", icon = Icons.Default.DarkMode, closeMenu = {  }, onClick = {})
-            MenuItem(name = "Delete completed tasks", icon = Icons.Default.Delete, closeMenu = {  }, onClick = {})
-            MenuItem(name = "Delete category", icon = Icons.Default.DeleteForever, closeMenu = { toggleExpandedState() }, onClick = { showDeleteCategoryModal() })
+            MenuItem(name = "Delete completed tasks", icon = Icons.Default.Delete, closeMenu = { closeMenu() }, onClick = { showDeleteCompletedTasksModal() })
+            MenuItem(name = "Delete category", icon = Icons.Default.DeleteForever, closeMenu = { closeMenu() }, onClick = { showDeleteCategoryModal() })
             MenuItem(name = "Settings", icon = Icons.Default.Settings, closeMenu = {  }, onClick = {})
-
         }
     }
 }

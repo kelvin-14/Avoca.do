@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.happymeerkat.avocado.domain.model.Category
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCategoryDialog(
     modifier: Modifier = Modifier,
@@ -48,13 +52,25 @@ fun EditCategoryDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text("EDIT CATEGORY", fontWeight = FontWeight.Bold)
+                Text("EDIT CATEGORY", style = MaterialTheme.typography.titleMedium)
                 Row {
-                    TextField(value = newName, onValueChange = {newName = it})
+                    TextField(
+                        value = newName,
+                        onValueChange = {newName = it},
+                        colors = textFieldColors(
+                            focusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.background,
+                            cursorColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        singleLine = true
+                    )
                 }
                 Row(
 
@@ -63,14 +79,13 @@ fun EditCategoryDialog(
                         Text(
                             text = "DELETE",
                             color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(onClick = { editCategoryName(newName); closeModal() }) {
                         Text(
                             text = "SAVE",
-                            style = MaterialTheme.typography.bodyLarge
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }

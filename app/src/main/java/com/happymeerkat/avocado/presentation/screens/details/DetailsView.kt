@@ -58,7 +58,7 @@ fun DetailsView(
     Scaffold(
         topBar = {
             DetailsTopAppBar(
-                modifier = Modifier.fillMaxWidth().background(Color.Red),
+                modifier = Modifier.fillMaxWidth(),
                 navigateUp = backToHome,
                 updateItem = {viewModel.updateItem(null, context)}
             )

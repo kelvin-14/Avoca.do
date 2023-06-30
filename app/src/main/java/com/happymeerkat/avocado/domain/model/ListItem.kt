@@ -9,7 +9,7 @@ import java.io.Serializable
 )
 data class ListItem(
     @PrimaryKey(autoGenerate = false)
-    val id: Int? = null,
+    val id: Int,
     val title: String,
     val description: String? = null,
     val categoryId: Int? = null,

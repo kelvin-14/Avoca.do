@@ -119,25 +119,33 @@ class EditItemVM @Inject constructor(
 
         viewModelScope.launch {
             val currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ListItem(
-                    id = currentItemId,
-                    title = _itemUIState.value.title,
-                    description = _itemUIState.value.description,
-                    categoryId = _itemUIState.value.categoryId,
-                    dateMade = _itemUIState.value.dateMade,
-                    dateDue = _itemUIState.value.dateDue,
-                    timeDue = _itemUIState.value.timeDue,
-                    completed = _itemUIState.value.completed
-                )
+                currentItemId?.let {
+                    ListItem(
+                        id = it,
+                        title = _itemUIState.value.title,
+                        description = _itemUIState.value.description,
+                        categoryId = _itemUIState.value.categoryId,
+                        dateMade = _itemUIState.value.dateMade,
+                        dateDue = _itemUIState.value.dateDue,
+                        timeDue = _itemUIState.value.timeDue,
+                        completed = _itemUIState.value.completed
+                    )
+                }
             } else {
                 TODO("VERSION.SDK_INT < S")
             }
-            removeAlarm(currentItem, context)
-            if(currentItem.timeDue != null) {
-                setAlarm(currentItem, context)
+            if (currentItem != null) {
+                removeAlarm(currentItem, context)
+            }
+            if (currentItem != null) {
+                if(currentItem.timeDue != null) {
+                    if (currentItem != null) {
+                        setAlarm(currentItem, context)
+                    }
+                }
             }
 
-            upsertListItem(item ?: currentItem)
+            (item ?: currentItem)?.let { upsertListItem(it) }
         }
     }
 

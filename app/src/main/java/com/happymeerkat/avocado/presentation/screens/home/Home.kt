@@ -99,10 +99,10 @@ fun Home(
             CategoryTabs(
                 modifier = Modifier.fillMaxWidth(),
                 categories = state.categories,
-                changeCurrentCategory = {category -> viewModel.changeCurrentCategory(category)},
-                currentCategory = state.currentCategory,
+                changeCurrentCategory = { category -> viewModel.changeCurrentCategory(category) },
                 showEditDialog = {editCategory = true},
-                showCreateNewCategoryModal = {createCategory = true}
+                showCreateNewCategoryModal = { createCategory = true },
+                currentCategory = state.currentCategory
             )
 
             ItemsList(
@@ -164,7 +164,7 @@ fun Home(
             val defaultCategoryMessage = "The default category cannot be deleted"
             val restCategoryMessage = "Deleting category \"${state.currentCategory.name}\" will also delete all items associated with it?"
 
-            if(state.currentCategory.name == stringResource(id = R.string.default_category_name)) {
+            if(state.currentCategory.id == 1) {
                 InformationalDialog(title = null, message = defaultCategoryMessage, closeModal = { deleteCategory = false })
             } else {
                 ConfirmationDialog(
@@ -188,9 +188,11 @@ fun Home(
         if(showMenu) {
             MenuDialog(
                 expanded = showMenu,
-                toggleExpandedState = {showMenu = !showMenu},
+                closeMenu = {showMenu = false},
                 showCreateNewCategoryModal = { createCategory = true },
-                showDeleteCategoryModal = { deleteCategory = true }
+                showDeleteCategoryModal = { deleteCategory = true },
+                showDeleteCompletedTasksModal = { deleteCompleted = true }
+
             )
         }
 
