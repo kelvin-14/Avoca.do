@@ -70,11 +70,13 @@ fun DateDialog(
         }
         TextButton(onClick = { viewModel.setDateDue(pickedDate); openTimeDialog(); }) {
             Text(
-                state.timeDue?.let {
+                text = state.timeDue?.let {
                     Instant.ofEpochSecond(it).atZone(
                         ZoneId.systemDefault().rules.getOffset(
                             Instant.now())).toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a"))
-                } ?: "Set time as well", fontSize = 20.sp)
+                } ?: "Set time as well", fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }
