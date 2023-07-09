@@ -84,7 +84,7 @@ dependencies {
 
     // ViewModel utilities for Compose
     val lifecycle_version = "2.6.1"
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+   // implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
     implementation ("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
     implementation ("io.coil-kt:coil-compose:2.3.0")

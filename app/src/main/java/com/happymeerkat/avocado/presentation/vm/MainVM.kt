@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
-import com.happymeerkat.avocado.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
