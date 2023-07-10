@@ -50,10 +50,10 @@ fun MenuDialog(
         ) {
             MenuItem(name = "new category", icon = Icons.Default.Add, closeMenu = { closeMenu() }, onClick = { showCreateNewCategoryModal() })
             // MenuItem(name = "Tips", icon = Icons.Default.TipsAndUpdates, closeMenu = {  }, onClick = {}) TODO: Put this in settings
-            MenuItem(name = "Dark Mode", icon = Icons.Default.DarkMode, closeMenu = {  }, onClick = {})
+            //MenuItem(name = "Dark Mode", icon = Icons.Default.DarkMode, closeMenu = {  }, onClick = {})
             MenuItem(name = "Delete completed tasks", icon = Icons.Default.Delete, closeMenu = { closeMenu() }, onClick = { showDeleteCompletedTasksModal() })
             MenuItem(name = "Delete category", icon = Icons.Default.DeleteForever, closeMenu = { closeMenu() }, onClick = { showDeleteCategoryModal() })
-            MenuItem(name = "Settings", icon = Icons.Default.Settings, closeMenu = {  }, onClick = {})
+            //MenuItem(name = "Settings", icon = Icons.Default.Settings, closeMenu = {  }, onClick = {})
         }
     }
 }

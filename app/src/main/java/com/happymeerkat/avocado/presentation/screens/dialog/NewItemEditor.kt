@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +40,9 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewItemEditor(
@@ -94,7 +97,14 @@ fun NewItemEditor(
                                 )
                         }
                     ),
-                    singleLine = true
+                    singleLine = true,
+                    colors = textFieldColors(
+                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.background,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.background,
+                        cursorColor = MaterialTheme.colorScheme.onPrimary
+                    ),
                 )
                 LaunchedEffect(Unit) {
                     focusRequester.requestFocus()
@@ -103,7 +113,7 @@ fun NewItemEditor(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(4.dp)
+                        .padding(horizontal = 4.dp)
                         .clickable { },
                     verticalAlignment = Alignment.CenterVertically
                 ){

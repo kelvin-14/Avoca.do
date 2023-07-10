@@ -67,13 +67,15 @@ class EditItemVM @Inject constructor(
     }
 
     fun setTimeDue(time: LocalTime) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            _itemUIState.value = itemUIState.value.copy(timeDue = time.toEpochSecond(_itemUIState.value.selectedDate ?: LocalDate.ofEpochDay(itemUIState.value.dateDue!!),
-                ZoneId.systemDefault().rules.getOffset(Instant.now())))
-        }
+            _itemUIState.value = itemUIState.value.copy(timeDue = time
+                .toEpochSecond(
+                    _itemUIState.value.selectedDate ?: LocalDate.ofEpochDay(itemUIState.value.dateDue!!),
+                    ZoneId.systemDefault().rules.getOffset(Instant.now())
+                )
+            )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun setDateDue(date: LocalDate) {
         _itemUIState.value = itemUIState.value.copy(dateDue = date.toEpochDay(), selectedDate = date)
         Log.d("DATE set as selected", _itemUIState.value.selectedDate.toString())
@@ -92,23 +94,18 @@ class EditItemVM @Inject constructor(
         listUseCases.upsertItem(item)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createNewItem(category: Category, context: Context) {
         viewModelScope.launch {
-            val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val diff = (Date().time/1000) - Constants.sDate
-                ListItem(
-                    id = diff.toInt(),
-                    title = _itemUIState.value.title,
-                    description = _itemUIState.value.description,
-                    categoryId = category.id, // TODO:change to
-                    dateMade = _itemUIState.value.dateMade,
-                    dateDue = _itemUIState.value.dateDue,
-                    timeDue = _itemUIState.value.timeDue
-                )
-            } else {
-                TODO("VERSION.SDK_INT < S")
-            }
+            val diff = (Date().time/1000) - Constants.sDate
+            val item = ListItem(
+                id = diff.toInt(),
+                title = _itemUIState.value.title,
+                description = _itemUIState.value.description,
+                categoryId = category.id, // TODO:change to
+                dateMade = _itemUIState.value.dateMade,
+                dateDue = _itemUIState.value.dateDue,
+                timeDue = _itemUIState.value.timeDue
+            )
             if(item.timeDue != null) setAlarm(item, context)
 
             upsertListItem(item)
@@ -118,8 +115,7 @@ class EditItemVM @Inject constructor(
     fun updateItem(item: ListItem?, context: Context) {
 
         viewModelScope.launch {
-            val currentItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                currentItemId?.let {
+            val currentItem = currentItemId?.let {
                     ListItem(
                         id = it,
                         title = _itemUIState.value.title,
@@ -131,9 +127,7 @@ class EditItemVM @Inject constructor(
                         completed = _itemUIState.value.completed
                     )
                 }
-            } else {
-                TODO("VERSION.SDK_INT < S")
-            }
+
             if (currentItem != null) {
                 removeAlarm(currentItem, context)
             }

@@ -24,18 +24,12 @@ import javax.inject.Inject
 class RebootBroadcastReceiver: BroadcastReceiver() {
 
     private lateinit var repository: ListRepository
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        val time =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                LocalTime.now().toEpochSecond(
+        val time = LocalTime.now().toEpochSecond(
                     LocalDate.now(),
                     ZoneId.systemDefault().rules.getOffset(Instant.now())
                 )
-            } else {
-                //TODO:
-                0
-            }
 
         CoroutineScope(Main).launch {
             val todos = repository.getActiveAlarms(time)
