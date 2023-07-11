@@ -55,9 +55,11 @@ class MainVM @Inject constructor(
     fun createNewCategory(category: Category) {
         if (category.name != "" && !categoryNameExists(category.name)) {
             viewModelScope.launch {
-                listUseCases.categoryUpsert(category)
+                val newCategory = listUseCases.categoryUpsert(category)
+                changeCurrentCategory(newCategory)
+                // TODO: there is really nothing to do here but this is a funny fix to the async problem i've been facing
+                // ... for weeks of trying to make the current category be the most recently added one
             }
-            changeCurrentCategory(category)
         }
     }
     fun changeCurrentCategory(category: Category) {

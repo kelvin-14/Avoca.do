@@ -6,7 +6,8 @@ import com.happymeerkat.avocado.domain.repository.CategoryRepository
 class CategoryUpsert(
     private val categoryRepository: CategoryRepository
 ) {
-    suspend operator fun invoke(category: Category) {
+    suspend operator fun invoke(category: Category): Category {
         categoryRepository.upsertCategory(category)
+        return category
     }
 }

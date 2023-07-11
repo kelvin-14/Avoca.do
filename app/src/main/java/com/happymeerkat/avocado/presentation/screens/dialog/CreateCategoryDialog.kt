@@ -76,7 +76,10 @@ fun CreateCategoryDialog(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(onClick = { createCategoryExt(
-                        create = {createCategory( Category(id = (((Date().time/1000) - Constants.sDate).toInt()), name = newCategoryName) ); changeCurrentActiveCategory()},
+                        create = {
+                            createCategory( Category(id = (((Date().time/1000) - Constants.sDate).toInt()),
+                                name = newCategoryName) ); changeCurrentActiveCategory()
+                                 },
                         closeModal = closeModal
                     ) }) {
                         Text(text = "CREATE", color = MaterialTheme.colorScheme.onPrimary)

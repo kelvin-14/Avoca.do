@@ -89,6 +89,7 @@ object AppModule {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     val contentValues = ContentValues()
+                    contentValues.put ("id",1)
                     contentValues.put ("name","All")
                     db.insert("Category", OnConflictStrategy.IGNORE, contentValues)
                 }
