@@ -47,8 +47,7 @@ class MainVM @Inject constructor(
             .categoryGetAll()
             .onEach { listOfCategories ->
                 _mainUIState.value = mainUIState.value.copy(
-                    categories = listOfCategories,
-                    currentCategory = listOfCategories.first()
+                    categories = listOfCategories
                 )
             }
             .launchIn(viewModelScope)
