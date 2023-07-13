@@ -14,8 +14,8 @@ android {
         applicationId = "com.happymeerkat.avocado"
         minSdk = 21
         targetSdk = 33
-        versionCode = 1025
-        versionName = "1.0.2.5"
+        versionCode = 10282
+        versionName = "1.0.2.8.2"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -50,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -104,11 +105,6 @@ dependencies {
 
     // Preferences data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    // Retrofit
-    val retrofitVersion = "2.9.0"
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.0.0-alpha08")

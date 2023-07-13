@@ -16,7 +16,6 @@ fun CategoryTabs(
     changeCurrentCategory: (category: Category) -> Unit,
     currentCategory: Category,
     showEditDialog: () -> Unit,
-    showCreateNewCategoryModal: () -> Unit
 ) {
     Row(
         modifier = modifier,

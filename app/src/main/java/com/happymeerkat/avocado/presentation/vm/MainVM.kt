@@ -46,6 +46,7 @@ class MainVM @Inject constructor(
         getCategoriesJob = listUseCases
             .categoryGetAll()
             .onEach { listOfCategories ->
+                Log.d("MYLOGS: CATEGS IN DB ", listOfCategories.size.toString())
                 _mainUIState.value = mainUIState.value.copy(
                     categories = listOfCategories
                 )
@@ -70,7 +71,7 @@ class MainVM @Inject constructor(
     fun deleteCurrentCategory() {
         viewModelScope.launch {
             listUseCases.categoryDelete(_mainUIState.value.currentCategory)
-            _mainUIState.value = mainUIState.value.copy(currentCategory = mainUIState.value.categories.first())
+            _mainUIState.value = mainUIState.value.copy(currentCategory = Category(id = 1,  name = "All"))
         }
     }
 
@@ -78,7 +79,6 @@ class MainVM @Inject constructor(
         val currentCategoryId = _mainUIState.value.currentCategory.id
         if(!categoryNameExists(newName)) {
             viewModelScope.launch {
-
                 listUseCases.categoryUpsert(Category(id = currentCategoryId, name = newName))
                 _mainUIState.value = mainUIState.value.copy(currentCategory = Category(id = currentCategoryId, name = newName))
             }
@@ -100,10 +100,8 @@ class MainVM @Inject constructor(
 }
 
 data class MainUIState(
-    val listItems: List<ListItem> = emptyList() ,
+    val listItems: List<ListItem> = emptyList(),
     val listCompletedItems: List<ListItem> = emptyList(),
     val currentCategory: Category = Category(id = 1,  name = "All"),
     val categories: List<Category> = emptyList(),
-    val selected: Set<Int> = emptySet(), // e.g when deleting, put the id of selected items here
-    val editState: Boolean = false,
     )

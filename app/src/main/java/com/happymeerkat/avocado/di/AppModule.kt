@@ -91,7 +91,7 @@ object AppModule {
                     val contentValues = ContentValues()
                     contentValues.put ("id",1)
                     contentValues.put ("name","All")
-                    db.insert("Category", OnConflictStrategy.IGNORE, contentValues)
+                    db.insert("Category", OnConflictStrategy.REPLACE, contentValues)
                 }
             })
             .build()

@@ -1,6 +1,7 @@
 package com.happymeerkat.avocado.presentation.screens.home
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,22 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.happymeerkat.avocado.R
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.presentation.screens.category.CategoryTabs
-import com.happymeerkat.avocado.presentation.screens.dialog.DateDialog
-import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.ConfirmationDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.CreateCategoryDialog
+import com.happymeerkat.avocado.presentation.screens.dialog.DateDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.EditCategoryDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.InformationalDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.MenuDialog
 import com.happymeerkat.avocado.presentation.screens.dialog.NewItemEditor
+import com.happymeerkat.avocado.presentation.screens.dialog.TimeDialog
 import com.happymeerkat.avocado.presentation.vm.MainVM
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
@@ -63,6 +60,7 @@ fun Home(
 
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
+    Log.d("MILOGS: Categs UI gets", state.categories.size.toString())
 
     Box(
         modifier = modifier
@@ -101,7 +99,6 @@ fun Home(
                 categories = state.categories,
                 changeCurrentCategory = { category -> viewModel.changeCurrentCategory(category) },
                 showEditDialog = {editCategory = true},
-                showCreateNewCategoryModal = { createCategory = true },
                 currentCategory = state.currentCategory
             )
 
@@ -156,7 +153,7 @@ fun Home(
             CreateCategoryDialog(
                 createCategory = { category: Category -> viewModel.createNewCategory(category) },
                 closeModal = {createCategory = false},
-                changeCurrentActiveCategory = { viewModel.changeCurrentCategory(state.categories.last()) }
+                changeCurrentActiveCategory = { category: Category ->  viewModel.changeCurrentCategory(category) }
             )
         }
 

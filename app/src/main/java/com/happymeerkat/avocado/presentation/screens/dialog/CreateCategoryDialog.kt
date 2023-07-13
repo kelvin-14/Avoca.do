@@ -35,7 +35,7 @@ import java.util.Date
 fun CreateCategoryDialog(
     modifier: Modifier = Modifier,
     createCategory: (newCategory: Category) -> Unit,
-    changeCurrentActiveCategory: () -> Unit,
+    changeCurrentActiveCategory: (newCategory: Category) -> Unit,
     closeModal: () -> Unit
 ) {
     var newCategoryName by remember { mutableStateOf("") }
@@ -75,26 +75,21 @@ fun CreateCategoryDialog(
                         Text(text = "CANCEL", color = Color.Red)
                     }
                     Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = { createCategoryExt(
-                        create = {
-                            createCategory( Category(id = (((Date().time/1000) - Constants.sDate).toInt()),
-                                name = newCategoryName) ); changeCurrentActiveCategory()
-                                 },
-                        closeModal = closeModal
-                    ) }) {
+                    TextButton(
+                        onClick = {
+                            val category = Category(
+                                id = ((Date().time/1000) - Constants.sDate).toInt(),
+                                name = newCategoryName
+                            );
+                            createCategory(category);
+                            changeCurrentActiveCategory(category);
+                            closeModal();
+                        }
+                    ) {
                         Text(text = "CREATE", color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
             }
         }
     }
-}
-
-fun createCategoryExt(
-    create: () -> Unit,
-    closeModal: () -> Unit
-) {
-    create()
-    closeModal()
-
 }
