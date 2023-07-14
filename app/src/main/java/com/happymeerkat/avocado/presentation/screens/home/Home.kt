@@ -99,7 +99,8 @@ fun Home(
                 categories = state.categories,
                 changeCurrentCategory = { category -> viewModel.changeCurrentCategory(category) },
                 showEditDialog = {editCategory = true},
-                currentCategory = state.currentCategory
+                currentCategory = state.currentCategory,
+                focusIndex = state.focusIndex
             )
 
             ItemsList(

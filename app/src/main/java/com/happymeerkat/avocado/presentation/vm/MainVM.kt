@@ -25,10 +25,12 @@ class MainVM @Inject constructor(
     val mainUIState: StateFlow<MainUIState> = _mainUIState
     var getListItemsJob: Job? = null
     var getCategoriesJob: Job? = null
+    var readActiveCategoryIndexJob: Job? = null
 
     init {
         getAllListItems()
         getAllCategories()
+        readActiveCategoryIndexPreference()
     }
     private fun getAllListItems() {
         getListItemsJob?.cancel()
@@ -54,6 +56,29 @@ class MainVM @Inject constructor(
             }
             .launchIn(viewModelScope)
     }
+
+    private fun readActiveCategoryIndexPreference() {
+        readActiveCategoryIndexJob?.cancel()
+        readActiveCategoryIndexJob = listUseCases
+            .readActiveCategoryIndex()
+            .onEach { activeIndex ->
+                Log.d("ACTIVE INDEX read by vm", activeIndex.toString())
+                _mainUIState.value = mainUIState.value.copy(
+                    focusIndex = activeIndex,
+                    currentCategory = if(activeIndex < _mainUIState.value.categories.size) {
+                        _mainUIState.value.categories[activeIndex]
+                    } else {
+                        _mainUIState.value.categories[0]
+                    }
+                )
+            }
+            .launchIn(viewModelScope)
+    }
+    private suspend fun writeActiveCategoryIndexPreference(index: Int) {
+        listUseCases
+            .saveActiveCategoryIndex(index)
+
+    }
     fun createNewCategory(category: Category) {
         if (category.name != "" && !categoryNameExists(category.name)) {
             viewModelScope.launch {
@@ -61,12 +86,19 @@ class MainVM @Inject constructor(
                 changeCurrentCategory(newCategory)
                 // TODO: there is really nothing to do here but this is a funny fix to the async problem i've been facing
                 // ... for weeks of trying to make the current category be the most recently added one
+                writeActiveCategoryIndexPreference(_mainUIState.value.categories.size)
             }
         }
     }
     fun changeCurrentCategory(category: Category) {
         Log.d("CHECKER", category.name)
         _mainUIState.value = mainUIState.value.copy(currentCategory = category)
+        viewModelScope.launch { // TODO: MAY BE AN EXPENSIVE OPERATION WRITING SO OFTEN TO DATASTORE. FIND THE BEST LIFECYCLE TIMES TO INSERT DATA
+            val index = _mainUIState.value.categories.indexOf(category)
+            if (index != -1) {
+                writeActiveCategoryIndexPreference(index)
+            }
+        }
         Log.d("CATEGORY", mainUIState.value.currentCategory.name)
     }
     fun deleteCurrentCategory() {

@@ -24,6 +24,8 @@ import com.happymeerkat.avocado.domain.use_case.CategoryUpsert
 import com.happymeerkat.avocado.domain.use_case.GetItemById
 import com.happymeerkat.avocado.domain.use_case.GetItems
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
+import com.happymeerkat.avocado.domain.use_case.ReadActiveCategoryIndex
+import com.happymeerkat.avocado.domain.use_case.SaveActiveCategoryIndex
 import com.happymeerkat.avocado.domain.use_case.UpsertItem
 import dagger.Module
 import dagger.Provides
@@ -69,7 +71,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideUseCases(
-        repo: ListRepository, catRepo: CategoryRepository
+        repo: ListRepository, catRepo: CategoryRepository, listFocusPreferenceRepository: ListFocusPreferenceRepository
     ): ListUseCases {
         return ListUseCases(
             getItems = GetItems(repo),
@@ -78,7 +80,9 @@ object AppModule {
             deleteCompletedTasks = DeleteCompletedTasks(repo),
             categoryGetAll = CategoryGetAll(catRepo),
             categoryUpsert = CategoryUpsert(catRepo),
-            categoryDelete = CategoryDelete(catRepo = catRepo, listRepo = repo)
+            categoryDelete = CategoryDelete(catRepo = catRepo, listRepo = repo),
+            readActiveCategoryIndex = ReadActiveCategoryIndex(listFocusPreferenceRepository),
+            saveActiveCategoryIndex = SaveActiveCategoryIndex(listFocusPreferenceRepository)
         )
     }
 

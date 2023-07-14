@@ -22,7 +22,9 @@ class ListFocusPreferenceRepository(
     suspend fun saveFocusPreference(focusIndex: Int) {
         dataStore.edit { preferences ->
             preferences[FOCUS_INDEX] = focusIndex
+            Log.d("DATA SAVE index", preferences[FOCUS_INDEX].toString())
         }
+
     }
 
     val readFocusPreference: Flow<Int> = dataStore.data
@@ -37,4 +39,5 @@ class ListFocusPreferenceRepository(
         .map { preferences ->
             preferences[FOCUS_INDEX] ?: 0
         }
+
 }

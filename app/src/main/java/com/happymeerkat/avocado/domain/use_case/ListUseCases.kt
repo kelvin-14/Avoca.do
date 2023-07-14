@@ -7,5 +7,7 @@ data class ListUseCases(
     val deleteCompletedTasks: DeleteCompletedTasks,
     val categoryGetAll: CategoryGetAll,
     val categoryUpsert: CategoryUpsert,
-    val categoryDelete: CategoryDelete
+    val categoryDelete: CategoryDelete,
+    val readActiveCategoryIndex: ReadActiveCategoryIndex,
+    val saveActiveCategoryIndex: SaveActiveCategoryIndex
 )

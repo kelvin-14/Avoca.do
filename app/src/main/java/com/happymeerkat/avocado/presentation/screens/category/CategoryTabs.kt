@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.screens.category
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
@@ -20,11 +21,10 @@ fun CategoryTabs(
     changeCurrentCategory: (category: Category) -> Unit,
     currentCategory: Category,
     showEditDialog: () -> Unit,
+    focusIndex: Int
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-
-
 
     Row(
         modifier = modifier,
@@ -38,20 +38,17 @@ fun CategoryTabs(
                 state = listState
             ) {
                 items(categories){it ->
-
+                    LaunchedEffect(focusIndex) {
+                        coroutineScope.launch {
+                            listState.animateScrollToItem(focusIndex)
+                        }
+                    }
                     Tab(
                         category = it,
                         focusOn = { changeCurrentCategory(it) },
                         isCurrent = it == currentCategory,
                         showEditDialog = { showEditDialog() }
                     )
-                    LaunchedEffect(Unit) {
-                        //val index = categories.indexOf(currentCategory)
-                        coroutineScope.launch {
-                            listState.animateScrollToItem(3)
-                        }
-                    }
-
                 }
             }
         }
