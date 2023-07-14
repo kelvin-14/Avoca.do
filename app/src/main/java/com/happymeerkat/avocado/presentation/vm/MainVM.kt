@@ -25,6 +25,7 @@ class MainVM @Inject constructor(
     val mainUIState: StateFlow<MainUIState> = _mainUIState
     var getListItemsJob: Job? = null
     var getCategoriesJob: Job? = null
+
     init {
         getAllListItems()
         getAllCategories()
@@ -104,4 +105,5 @@ data class MainUIState(
     val listCompletedItems: List<ListItem> = emptyList(),
     val currentCategory: Category = Category(id = 1,  name = "All"),
     val categories: List<Category> = emptyList(),
+    val focusIndex: Int = 0 // we should fetch this from datastore
     )

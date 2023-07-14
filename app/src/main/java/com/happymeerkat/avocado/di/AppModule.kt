@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.happymeerkat.avocado.data.CategoryRepositoryImpl
 import com.happymeerkat.avocado.data.ListDatabase
 import com.happymeerkat.avocado.data.ListRepositoryImpl
+import com.happymeerkat.avocado.data.preferences.ListFocusPreferenceRepository
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.repository.CategoryRepository
 import com.happymeerkat.avocado.domain.repository.ListRepository
@@ -46,6 +47,12 @@ object AppModule {
     @Singleton
     fun provideDataStore(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
         return applicationContext.userDataStore
+    }
+
+    @Provides
+    @Singleton
+    fun provideFocusPreferenceRepository(dataStore: DataStore<Preferences>): ListFocusPreferenceRepository {
+        return ListFocusPreferenceRepository(dataStore)
     }
 
     @Provides
