@@ -49,13 +49,15 @@ fun DetailsView(
     val dateDialogState = rememberMaterialDialogState()
     val timeDialogState = rememberMaterialDialogState()
 
+    val oldTimeDue = state.copy().timeDue
+
 
     Scaffold(
         topBar = {
             DetailsTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 navigateUp = backToHome,
-                updateItem = {viewModel.updateItem(null, context)}
+                updateItem = {viewModel.updateItem(context = context, oldTimeDue = null)}
             )
         }
     ) {it ->
@@ -65,7 +67,7 @@ fun DetailsView(
         ) {
             BackHandler(enabled = true) {
                 backToHome()
-                viewModel.updateItem(null, context)
+                viewModel.updateItem(oldTimeDue, context)
             }
             Column(
                 modifier = Modifier

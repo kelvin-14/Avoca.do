@@ -14,8 +14,8 @@ android {
         applicationId = "com.happymeerkat.avocado"
         minSdk = 21
         targetSdk = 33
-        versionCode = 10282
-        versionName = "1.0.2.8.2"
+        versionCode = 10283
+        versionName = "1.0.2.8.3"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

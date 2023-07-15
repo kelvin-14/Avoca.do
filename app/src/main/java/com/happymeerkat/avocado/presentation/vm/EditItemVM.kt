@@ -112,7 +112,7 @@ class EditItemVM @Inject constructor(
         }
     }
 
-    fun updateItem(item: ListItem?, context: Context) {
+    fun updateItem(oldTimeDue: Long?, context: Context) {
 
         viewModelScope.launch {
             val currentItem = currentItemId?.let {
@@ -128,18 +128,16 @@ class EditItemVM @Inject constructor(
                     )
                 }
 
-            if (currentItem != null) {
-                removeAlarm(currentItem, context)
+        if (currentItem?.timeDue != null) {
+            if(oldTimeDue != null && oldTimeDue != currentItem.timeDue) {
+                removeAlarm(currentItem.copy(timeDue = oldTimeDue), context)
             }
-            if (currentItem != null) {
-                if(currentItem.timeDue != null) {
-                    if (currentItem != null) {
-                        setAlarm(currentItem, context)
-                    }
-                }
+            if (oldTimeDue == null || (oldTimeDue != currentItem.timeDue)) {
+                setAlarm(currentItem, context)
             }
+        }
 
-            (item ?: currentItem)?.let { upsertListItem(it) }
+            (currentItem)?.let { upsertListItem(it) }
         }
     }
 

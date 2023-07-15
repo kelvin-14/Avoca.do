@@ -68,7 +68,7 @@ class MainVM @Inject constructor(
                     currentCategory = if(activeIndex < _mainUIState.value.categories.size) {
                         _mainUIState.value.categories[activeIndex]
                     } else {
-                        _mainUIState.value.categories[0]
+                        Category(id = 1,  name = "All")
                     }
                 )
             }
