@@ -12,10 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @AndroidEntryPoint
 class OnCompletedBroadCastReceiver: BroadcastReceiver() {
-    private lateinit var listRepository: ListRepository
+    @Inject lateinit var listRepository: ListRepository
     override fun onReceive(context: Context?, intent: Intent?) {
         val listItem = intent?.serializable("list_item") as? ListItem
         if(listItem != null) {

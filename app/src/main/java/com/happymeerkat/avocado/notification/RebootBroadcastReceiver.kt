@@ -23,7 +23,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RebootBroadcastReceiver: BroadcastReceiver() {
 
-    private lateinit var repository: ListRepository
+    @Inject lateinit var repository: ListRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val time = LocalTime.now().toEpochSecond(
