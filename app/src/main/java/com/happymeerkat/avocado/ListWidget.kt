@@ -3,20 +3,34 @@ package com.happymeerkat.avocado
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
+import com.happymeerkat.avocado.domain.model.ListItem
+import com.happymeerkat.avocado.domain.repository.ListRepository
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Implementation of App Widget functionality.
  */
+@AndroidEntryPoint
 class ListWidget : AppWidgetProvider() {
+    @Inject lateinit var listRepository: ListRepository
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
+        Log.d("WIDGET initial update", "a")
         for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            updateAppWidget(context, appWidgetManager, appWidgetId, listRepository)
         }
     }
 
@@ -32,13 +46,33 @@ class ListWidget : AppWidgetProvider() {
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
-    appWidgetId: Int
+    appWidgetId: Int,
+    listRepository: ListRepository
 ) {
-    val widgetText = context.getString(R.string.appwidget_text)
     // Construct the RemoteViews object
+    Log.d("WIDGET in update fun", "a")
     val views = RemoteViews(context.packageName, R.layout.list_widget)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
 
-    // Instruct the widget manager to update the widget
-    appWidgetManager.updateAppWidget(appWidgetId, views)
+    CoroutineScope(Dispatchers.IO).launch {
+        val listItemsFlow = listOf<ListItem>(
+            ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false)
+        )
+        CoroutineScope(Dispatchers.Main).launch {
+                setImprovisedAdapter(listItemsFlow, views, context)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
+    }
+}
+
+fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context: Context) {
+    Log.d("WIDGET done w adapter", "a")
+    if(listItems.isEmpty()) {
+        views.setTextViewText(R.id.widget_list_item, "All tasks done")
+    } else {
+        listItems.forEach {
+            views.setTextViewText(R.id.widget_list_item, it.title)
+        }
+    }
 }
