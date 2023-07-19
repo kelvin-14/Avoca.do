@@ -50,7 +50,6 @@ internal fun updateAppWidget(
     listRepository: ListRepository
 ) {
     // Construct the RemoteViews object
-    Log.d("WIDGET in update fun", "a")
     val views = RemoteViews(context.packageName, R.layout.list_widget)
 
     CoroutineScope(Dispatchers.IO).launch {
@@ -60,19 +59,17 @@ internal fun updateAppWidget(
             ListItem(id = 3, title = "some item 3", completed = false)
         )
         CoroutineScope(Dispatchers.Main).launch {
-                setImprovisedAdapter(listItemsFlow, views, context)
+            setImprovisedAdapter(listItemsFlow, views, context)
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
 }
 
 fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context: Context) {
-    Log.d("WIDGET done w adapter", "a")
-    if(listItems.isEmpty()) {
-        views.setTextViewText(R.id.widget_list_item, "All tasks done")
-    } else {
+
         listItems.forEach {
-            views.setTextViewText(R.id.widget_list_item, it.title)
+            val otherView = RemoteViews(context.packageName, R.layout.other)
+            otherView.setTextViewText(R.id.textView, it.title)
+            views.addView(R.id.widgetlist, otherView)
         }
-    }
 }
