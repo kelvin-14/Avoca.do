@@ -3,9 +3,11 @@ package com.happymeerkat.avocado
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +45,7 @@ class ListWidget : AppWidgetProvider() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
@@ -57,28 +60,16 @@ internal fun updateAppWidget(
             ListItem(id = 1, title = "some item 1", completed = false),
             ListItem(id = 2, title = "some item 2", completed = false),
             ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
             ListItem(id = 2, title = "some item 2", completed = false),
             ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
             ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),
         )
         CoroutineScope(Dispatchers.Main).launch {
             setImprovisedAdapter(listItemsFlow, views, context)
@@ -87,11 +78,21 @@ internal fun updateAppWidget(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context: Context) {
+    val collection = RemoteViews.RemoteCollectionItems.Builder()
 
-        listItems.forEach {
-            val otherView = RemoteViews(context.packageName, R.layout.other)
-            otherView.setTextViewText(R.id.textView, it.title)
-            views.addView(R.id.scroll, otherView)
-        }
+    listItems.forEach {listItem ->
+        val itemView = RemoteViews(context.packageName, R.layout.other)
+        itemView.setTextViewText(R.id.textView, listItem.title)
+        collection.addItem(
+            listItem.id.toLong(),
+            itemView
+        )
+    }
+
+    collection
+        .setViewTypeCount(listItems.size)
+
+    views.setRemoteAdapter(R.id.scroll, collection.build())
 }
