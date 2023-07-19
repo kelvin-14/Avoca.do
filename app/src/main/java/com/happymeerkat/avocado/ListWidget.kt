@@ -56,7 +56,29 @@ internal fun updateAppWidget(
         val listItemsFlow = listOf<ListItem>(
             ListItem(id = 1, title = "some item 1", completed = false),
             ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false)
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
+            ListItem(id = 2, title = "some item 2", completed = false),
+            ListItem(id = 3, title = "some item 3", completed = false),
         )
         CoroutineScope(Dispatchers.Main).launch {
             setImprovisedAdapter(listItemsFlow, views, context)
@@ -70,6 +92,6 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
         listItems.forEach {
             val otherView = RemoteViews(context.packageName, R.layout.other)
             otherView.setTextViewText(R.id.textView, it.title)
-            views.addView(R.id.widgetlist, otherView)
+            views.addView(R.id.scroll, otherView)
         }
 }
