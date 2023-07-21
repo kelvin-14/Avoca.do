@@ -93,6 +93,7 @@ class EditItemVM @Inject constructor(
 
     private suspend fun upsertListItem(item: ListItem) {
         listUseCases.upsertItem(item)
+
     }
 
     fun createNewItem(category: Category, context: Context) {

@@ -1,11 +1,15 @@
 package com.happymeerkat.avocado.presentation.vm
 
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happymeerkat.avocado.domain.model.Category
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
+import com.happymeerkat.avocado.updateAppWidgetThroughContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -124,6 +128,11 @@ class MainVM @Inject constructor(
         viewModelScope.launch {
             listUseCases.deleteCompletedTasks(_mainUIState.value.currentCategory)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun updateWidget(context: Context) {
+        context.updateAppWidgetThroughContext(_mainUIState.value.listItems)
     }
 
     private fun categoryNameExists(name: String): Boolean {

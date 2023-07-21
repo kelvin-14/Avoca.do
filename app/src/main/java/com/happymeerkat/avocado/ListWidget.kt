@@ -2,6 +2,7 @@ package com.happymeerkat.avocado
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -13,8 +14,11 @@ import com.happymeerkat.avocado.domain.repository.ListRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +28,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ListWidget : AppWidgetProvider() {
     @Inject lateinit var listRepository: ListRepository
+    var getListItemsJob: Job? = null
+    var itemsList: List<ListItem> = emptyList()
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -31,9 +38,20 @@ class ListWidget : AppWidgetProvider() {
     ) {
         // There may be multiple widgets active, so update all of them
         Log.d("WIDGET initial update", "a")
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, listRepository)
-        }
+        getListItemsJob?.cancel()
+        getListItemsJob = listRepository
+            .getAllListItems()
+            .onEach {itemsList ->
+                updateAppWidget(
+                    context,
+                    appWidgetManager,
+                    appWidgetIds,
+                    itemsList
+                )
+                Log.d("WIDGET size got", itemsList.size.toString())
+            }.launchIn(CoroutineScope(Dispatchers.IO))
+
+
     }
 
     override fun onEnabled(context: Context) {
@@ -49,30 +67,15 @@ class ListWidget : AppWidgetProvider() {
 internal fun updateAppWidget(
     context: Context,
     appWidgetManager: AppWidgetManager,
-    appWidgetId: Int,
-    listRepository: ListRepository
+    appWidgetIds: IntArray,
+    itemsList: List<ListItem>
 ) {
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.list_widget)
 
-    CoroutineScope(Dispatchers.IO).launch {
-        val listItemsFlow = listOf<ListItem>(
-            ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-            ListItem(id = 3, title = "some item 3", completed = false),ListItem(id = 1, title = "some item 1", completed = false),
-            ListItem(id = 2, title = "some item 2", completed = false),
-        )
+    for (appWidgetId in appWidgetIds) {
         CoroutineScope(Dispatchers.Main).launch {
-            setImprovisedAdapter(listItemsFlow, views, context)
+            setImprovisedAdapter(itemsList, views, context)
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
@@ -95,4 +98,20 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
         .setViewTypeCount(listItems.size)
 
     views.setRemoteAdapter(R.id.scroll, collection.build())
+}
+
+
+@RequiresApi(Build.VERSION_CODES.S)
+fun Context.updateAppWidgetThroughContext(itemsList: List<ListItem>) {
+    val component = ComponentName(this,
+        ListWidget::class.java)
+    with(AppWidgetManager.getInstance(this)) {
+        val appWidgetIds = getAppWidgetIds(component)
+        updateAppWidget(
+            context = this@updateAppWidgetThroughContext,
+            appWidgetManager = this,
+            appWidgetIds = appWidgetIds,
+            itemsList = itemsList
+        )
+    }
 }

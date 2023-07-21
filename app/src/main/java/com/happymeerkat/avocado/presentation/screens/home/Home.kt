@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.screens.home
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -137,7 +138,11 @@ fun Home(
                     .align(Alignment.BottomCenter),
                 closeModal = { editState = false },
                 currentCategory = state.currentCategory,
-                showDateDialog = {dateDialogState.show()}
+                showDateDialog = {dateDialogState.show()},
+                updateWidget = {context: Context -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    viewModel.updateWidget(context)
+                }
+                }
             )
         }
 

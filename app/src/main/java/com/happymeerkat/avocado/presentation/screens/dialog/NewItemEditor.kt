@@ -1,5 +1,6 @@
 package com.happymeerkat.avocado.presentation.screens.dialog
 
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -41,6 +42,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
+import com.happymeerkat.avocado.ListWidget
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -50,7 +52,8 @@ fun NewItemEditor(
     closeModal: () -> Unit,
     viewModel: EditItemVM = hiltViewModel(),
     currentCategory: Category,
-    showDateDialog: () -> Unit
+    showDateDialog: () -> Unit,
+    updateWidget: (context: Context) -> Unit
 ) {
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
@@ -90,7 +93,7 @@ fun NewItemEditor(
                             else
                                 closeModalAndSave(
                                     closeModal = closeModal,
-                                    save = {viewModel.createNewItem(currentCategory, context)},
+                                    save = {viewModel.createNewItem(currentCategory, context); updateWidget(context)},
                                     clearField = {
                                         viewModel.clearEditSlate()
                                     }
