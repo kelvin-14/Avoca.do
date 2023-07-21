@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import com.happymeerkat.avocado.domain.model.ListItem
@@ -15,9 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,14 +50,6 @@ class ListWidget : AppWidgetProvider() {
 
 
     }
-
-    override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -86,8 +75,8 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
     val collection = RemoteViews.RemoteCollectionItems.Builder()
 
     listItems.forEach {listItem ->
-        val itemView = RemoteViews(context.packageName, R.layout.other)
-        itemView.setTextViewText(R.id.textView, listItem.title)
+        val itemView = RemoteViews(context.packageName, R.layout.list_item)
+        itemView.setTextViewText(R.id.item_title, listItem.title)
         collection.addItem(
             listItem.id.toLong(),
             itemView
