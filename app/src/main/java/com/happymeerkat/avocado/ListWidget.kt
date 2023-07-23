@@ -113,6 +113,8 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
             }
 
         itemView.setTextViewText(R.id.item_checkbox, listItem.title)
+        itemView.setCompoundButtonChecked(R.id.item_checkbox, listItem.completed)
+
         collection.addItem(
             listItem.id.toLong(),
             itemView
