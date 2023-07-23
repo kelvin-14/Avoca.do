@@ -100,7 +100,7 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
         val intent = Intent(context, WidgetCheckboxBroadcastReceiver::class.java)
             .setAction(WidgetCheckboxBroadcastReceiver.ACTION_CHECK_BOX_CHANGE)
             .putExtra(
-                WidgetCheckboxBroadcastReceiver.EXTRA_SUBMISSION_ID,
+                WidgetCheckboxBroadcastReceiver.ITEM_ID,
                 listItem.id
             )
 
