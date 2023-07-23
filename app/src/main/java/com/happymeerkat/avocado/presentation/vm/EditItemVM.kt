@@ -104,7 +104,7 @@ class EditItemVM @Inject constructor(
                 title = _itemUIState.value.title,
                 description = _itemUIState.value.description,
                 categoryId = category.id, // TODO:change to
-                dateMade = _itemUIState.value.dateMade,
+                dateMade = getDateNowLong(),
                 dateDue = _itemUIState.value.dateDue,
                 timeDue = _itemUIState.value.timeDue
             )
@@ -192,6 +192,10 @@ class EditItemVM @Inject constructor(
     fun getFormattedDate(date: Long): String {
         return LocalDate.ofEpochDay(date)
             .format(DateTimeFormatter.ofPattern("EEE, MMM dd"))
+    }
+
+    fun getDateNowLong(): Long {
+        return System.currentTimeMillis()/1000
     }
 }
 

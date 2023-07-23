@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ListDao {
-    @Query("SELECT * FROM list")
+    @Query("SELECT * FROM list ORDER BY dateMade DESC")
     fun getAllListItems(): Flow<List<ListItem>>
 
     @Query("SELECT * FROM list WHERE id = :id")

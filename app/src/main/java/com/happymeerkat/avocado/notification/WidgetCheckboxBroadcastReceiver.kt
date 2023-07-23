@@ -17,8 +17,6 @@ class WidgetCheckboxBroadcastReceiver: BroadcastReceiver() {
     @Inject
     lateinit var listUseCases: ListUseCases
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("WIDGET", intent.toString())
-        val action = intent?.action
         val extras = intent?.extras
         if(extras != null) {
             val item_id: Int = extras.getInt(ITEM_ID) // returns 0 if key not there
@@ -35,8 +33,6 @@ class WidgetCheckboxBroadcastReceiver: BroadcastReceiver() {
                 }
             }
         }
-
-
     }
 
     companion object {
