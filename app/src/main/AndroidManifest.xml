@@ -54,6 +54,12 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".notification.WidgetCheckboxBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.happymeerkat.avocado.checkboxChange"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

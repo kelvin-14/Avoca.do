@@ -1,15 +1,19 @@
 package com.happymeerkat.avocado
 
+import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
+import com.happymeerkat.avocado.notification.WidgetCheckboxBroadcastReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,13 +74,45 @@ internal fun updateAppWidget(
     }
 }
 
+@SuppressLint("RemoteViewLayout")
 @RequiresApi(Build.VERSION_CODES.S)
 fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context: Context) {
     val collection = RemoteViews.RemoteCollectionItems.Builder()
 
-    listItems.forEach {listItem ->
+    //val flags = PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    val pendingIntent = PendingIntent
+        .getBroadcast(
+            context,
+            0,
+            Intent(
+                context,
+                WidgetCheckboxBroadcastReceiver::class.java
+            ),
+            PendingIntent.FLAG_MUTABLE
+        )
+
+    views.setPendingIntentTemplate(
+        R.id.scroll,
+        pendingIntent
+    )
+
+    listItems.forEach { listItem ->
+        val intent = Intent(context, WidgetCheckboxBroadcastReceiver::class.java)
+            .setAction(WidgetCheckboxBroadcastReceiver.ACTION_CHECK_BOX_CHANGE)
+            .putExtra(
+                WidgetCheckboxBroadcastReceiver.EXTRA_SUBMISSION_ID,
+                listItem.id
+            )
+
         val itemView = RemoteViews(context.packageName, R.layout.list_item)
-        itemView.setTextViewText(R.id.item_title, listItem.title)
+            .apply {
+                setOnCheckedChangeResponse(
+                    R.id.item_checkbox,
+                    RemoteViews.RemoteResponse.fromFillInIntent(intent)
+                )
+            }
+
+        itemView.setTextViewText(R.id.item_checkbox, listItem.title)
         collection.addItem(
             listItem.id.toLong(),
             itemView
