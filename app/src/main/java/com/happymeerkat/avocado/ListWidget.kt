@@ -38,18 +38,16 @@ class ListWidget : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
-        Log.d("WIDGET initial update", "a")
         getListItemsJob?.cancel()
         getListItemsJob = listRepository
             .getAllListItems()
-            .onEach {itemsList ->
+            .onEach { itemsList ->
                 updateAppWidget(
                     context,
                     appWidgetManager,
                     appWidgetIds,
                     itemsList
                 )
-                Log.d("WIDGET size got", itemsList.size.toString())
             }.launchIn(CoroutineScope(Dispatchers.IO))
 
 
@@ -104,20 +102,24 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
                 listItem.id
             )
 
-        val itemView = RemoteViews(context.packageName, R.layout.list_item)
+        val listItemRowDetails = RemoteViews(context.packageName, R.layout.list_item_row_details)
+        listItemRowDetails.setTextViewText(R.id.list_item_title, listItem.title)
+
+        val listItemView = RemoteViews(context.packageName, R.layout.list_item)
             .apply {
                 setOnCheckedChangeResponse(
-                    R.id.item_checkbox,
+                    R.id.list_item_checkbox,
                     RemoteViews.RemoteResponse.fromFillInIntent(intent)
                 )
             }
 
-        itemView.setTextViewText(R.id.item_checkbox, listItem.title)
-        itemView.setCompoundButtonChecked(R.id.item_checkbox, listItem.completed)
+        listItemView.addView(R.id.list_item, listItemRowDetails)
+        listItemView.setCompoundButtonChecked(R.id.list_item_checkbox, listItem.completed)
+
 
         collection.addItem(
             listItem.id.toLong(),
-            itemView
+            listItemView
         )
     }
 

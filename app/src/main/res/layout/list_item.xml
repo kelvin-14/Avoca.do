@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:id="@+id/list_item"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:paddingVertical="4.dp">
 
     <CheckBox
-        android:id="@+id/item_checkbox"
+        android:id="@+id/list_item_checkbox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CheckBox" />
-</LinearLayout>
+        android:layout_height="wrap_content"/>
+
+
+</FrameLayout>
