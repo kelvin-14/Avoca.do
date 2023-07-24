@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
+import android.widget.RemoteViews.RemoteView
 import androidx.annotation.RequiresApi
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.domain.repository.ListRepository
@@ -82,7 +83,6 @@ internal fun updateAppWidget(
 fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context: Context) {
     val collection = RemoteViews.RemoteCollectionItems.Builder()
 
-    //val flags = PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     val pendingIntent = PendingIntent
         .getBroadcast(
             context,
@@ -107,19 +107,29 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
                 listItem.id
             )
 
-        val listItemRowDetails = if (listItem.completed == true) {
-            RemoteViews(context.packageName, R.layout.list_item_row_details_done)
+        val listItemRowDetails = RemoteViews(context.packageName, R.layout.list_item_row_details)
+
+        val listItemTitle = if(listItem.completed) {
+            RemoteViews(context.packageName, R.layout.title_completed)
         } else {
-            RemoteViews(context.packageName, R.layout.list_item_row_details)
+            RemoteViews(context.packageName, R.layout.title)
         }
+        listItemTitle.setTextViewText(R.id.title_text, listItem.title)
+        listItemRowDetails.addView(R.id.lird_title, listItemTitle)
 
-        listItemRowDetails.setTextViewText(R.id.list_item_title, listItem.title)
+        val dateTimeView = RemoteViews(context.packageName, R.layout.date_and_time)
+        val dateView = RemoteViews(context.packageName, R.layout.date)
+        val timeView = RemoteViews(context.packageName, R.layout.time)
         if (listItem.dateDue != null) {
-            listItemRowDetails.setTextViewText(R.id.list_item_due_date, getFormattedDate(listItem.dateDue))
+            dateView.setTextViewText(R.id.date_text, getFormattedDate(listItem.dateDue))
+            dateTimeView.addView(R.id.date_time_container, dateView)
         }
-
         if (listItem.timeDue != null) {
-            listItemRowDetails.setTextViewText(R.id.list_item_time_due, getFormattedTime(listItem.timeDue))
+            timeView.setTextViewText(R.id.time_text, getFormattedTime(listItem.timeDue))
+            dateTimeView.addView(R.id.date_time_container, timeView)
+        }
+        if (listItem.dateDue != null) {
+            listItemRowDetails.addView(R.id.lird_date_time, dateTimeView)
         }
 
         val listItemView = RemoteViews(context.packageName, R.layout.list_item)

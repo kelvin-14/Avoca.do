@@ -5,36 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingStart="38.dp"
-    android:paddingTop="4.dp">
+    android:paddingTop="4.dp"
+    android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/list_item_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView"
-            android:textColor="@color/textPrimary"/>
+    <LinearLayout
+        android:id="@+id/lird_title"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-                <TextView
-                    android:id="@+id/list_item_due_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:text=""
-                    android:textColor="@color/textPrimary"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/lird_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"/>
 
-                <TextView
-                    android:id="@+id/list_item_time_due"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:text=""
-                    android:textColor="@color/textPrimary"/>
 
-        </LinearLayout>
 
 </LinearLayout>
