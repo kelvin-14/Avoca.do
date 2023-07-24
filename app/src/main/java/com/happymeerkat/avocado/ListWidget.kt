@@ -21,6 +21,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 /**
@@ -110,6 +114,13 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
         }
 
         listItemRowDetails.setTextViewText(R.id.list_item_title, listItem.title)
+        if (listItem.dateDue != null) {
+            listItemRowDetails.setTextViewText(R.id.list_item_due_date, getFormattedDate(listItem.dateDue))
+        }
+
+        if (listItem.timeDue != null) {
+            listItemRowDetails.setTextViewText(R.id.list_item_time_due, getFormattedTime(listItem.timeDue))
+        }
 
         val listItemView = RemoteViews(context.packageName, R.layout.list_item)
             .apply {
@@ -149,4 +160,16 @@ fun Context.updateAppWidgetThroughContext(itemsList: List<ListItem>) {
             itemsList = itemsList
         )
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getFormattedTime(time: Long): String {
+    return Instant.ofEpochSecond(time).atZone(ZoneId.systemDefault().rules.getOffset(Instant.now())).toLocalTime().format(
+        DateTimeFormatter.ofPattern("hh:mm a"))
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getFormattedDate(date: Long): String {
+    return LocalDate.ofEpochDay(date)
+        .format(DateTimeFormatter.ofPattern("EEE, MMM dd"))
 }
