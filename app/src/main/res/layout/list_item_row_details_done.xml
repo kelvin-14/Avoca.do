@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:text="TextView"
             android:background="@drawable/line"
-            android:textColor="@color/black"/>
+            android:textColor="@color/textPrimary"/>
     </LinearLayout>
 
 
@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="5"
-        android:text="7-21" />
+        android:text="7-21"
+        android:textColor="@color/textPrimary"/>
 
 </LinearLayout>
