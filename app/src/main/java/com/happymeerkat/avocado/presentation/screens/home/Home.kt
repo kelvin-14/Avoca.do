@@ -115,7 +115,7 @@ fun Home(
                 else state.listItems.filter { (it.completed) and (it.categoryId == state.currentCategory.id) },
                 showDeleteCompletedItemsDialog = {deleteCompleted = true},
                 currentCategory = state.currentCategory
-            )
+            ) { context: Context -> viewModel.updateWidget(context) }
 
         }
 

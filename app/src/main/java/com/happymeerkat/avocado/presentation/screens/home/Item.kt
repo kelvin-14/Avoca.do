@@ -1,11 +1,11 @@
 package com.happymeerkat.avocado.presentation.screens.home
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,13 +17,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,18 +30,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.happymeerkat.avocado.domain.model.ListItem
 import com.happymeerkat.avocado.presentation.vm.EditItemVM
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -52,7 +44,8 @@ fun Item(
     modifier: Modifier = Modifier.fillMaxWidth(),
     item: ListItem,
     navigateToDetails: () -> Unit,
-    viewModel: EditItemVM = hiltViewModel()
+    viewModel: EditItemVM = hiltViewModel(),
+    updateWidget: (Context) -> Unit
 ) {
     val context = LocalContext.current
     Card(
@@ -76,7 +69,10 @@ fun Item(
             ) {
                 Checkbox(
                     checked = item.completed,
-                    onCheckedChange = {viewModel.markCompleted(item.copy(completed = !item.completed), context)},
+                    onCheckedChange = {
+                        viewModel.markCompleted(item.copy(completed = !item.completed), context);
+                        updateWidget(context)
+                                      },
                     modifier = Modifier.fillMaxSize(),
                     colors = CheckboxDefaults.colors(uncheckedColor = MaterialTheme.colorScheme.onPrimary )
                 )

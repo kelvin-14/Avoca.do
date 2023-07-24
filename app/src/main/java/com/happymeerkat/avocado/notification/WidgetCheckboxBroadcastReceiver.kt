@@ -6,10 +6,13 @@ import android.content.Intent
 import android.util.Log
 import com.happymeerkat.avocado.domain.repository.ListRepository
 import com.happymeerkat.avocado.domain.use_case.ListUseCases
+import com.happymeerkat.avocado.updateAppWidgetThroughContext
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,12 +27,19 @@ class WidgetCheckboxBroadcastReceiver: BroadcastReceiver() {
                 CoroutineScope(Dispatchers.IO).launch {
                     val list_item = listUseCases.getItemById(item_id)
                     if (list_item != null) {
-                        listUseCases.upsertItem(
-                            list_item.copy(
-                                completed = !list_item.completed
+                        withContext(Dispatchers.IO) {
+                            listUseCases.upsertItem(
+                                list_item.copy(
+                                    completed = !list_item.completed
+                                )
                             )
-                        )
+                            listUseCases.getItems().onEach {
+                                context?.updateAppWidgetThroughContext(it)
+                            }
+
+                        }
                     }
+
                 }
             }
         }

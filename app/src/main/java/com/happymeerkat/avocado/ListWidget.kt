@@ -63,6 +63,7 @@ internal fun updateAppWidget(
 ) {
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.list_widget)
+    views.removeAllViews(R.id.scroll)
 
     for (appWidgetId in appWidgetIds) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -102,7 +103,12 @@ fun setImprovisedAdapter(listItems: List<ListItem>, views: RemoteViews, context:
                 listItem.id
             )
 
-        val listItemRowDetails = RemoteViews(context.packageName, R.layout.list_item_row_details)
+        val listItemRowDetails = if (listItem.completed == true) {
+            RemoteViews(context.packageName, R.layout.list_item_row_details_done)
+        } else {
+            RemoteViews(context.packageName, R.layout.list_item_row_details)
+        }
+
         listItemRowDetails.setTextViewText(R.id.list_item_title, listItem.title)
 
         val listItemView = RemoteViews(context.packageName, R.layout.list_item)
