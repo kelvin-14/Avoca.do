@@ -11,13 +11,28 @@
         android:orientation="vertical"
         android:minHeight="30.dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="All Tasks"
-            android:textSize="18.sp"
-            android:textColor="@color/textPrimary"/>
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Tasks"
+                android:textSize="18.sp"
+                android:textColor="@color/textPrimary"
+                android:layout_weight="5"/>
+
+            <Button
+                android:id="@+id/widget_add_task_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
 
         <ListView
             android:id="@+id/scroll"

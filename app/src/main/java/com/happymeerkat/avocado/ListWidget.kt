@@ -70,6 +70,20 @@ internal fun updateAppWidget(
     val views = RemoteViews(context.packageName, R.layout.list_widget)
     views.removeAllViews(R.id.scroll)
 
+    val addTaskIntent = Intent(context, MainActivity::class.java)
+    addTaskIntent.putExtra("com.happymeerkat.avocado.WIDGET_ADD_TASK", 1)
+    addTaskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    views.setOnClickPendingIntent(
+        R.id.widget_add_task_button,
+        PendingIntent
+            .getActivity(
+                context,
+                0,
+                addTaskIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+    )
+
     for (appWidgetId in appWidgetIds) {
         CoroutineScope(Dispatchers.Main).launch {
             setImprovisedAdapter(itemsList, views, context)
