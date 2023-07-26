@@ -138,11 +138,7 @@ fun Home(
                     .align(Alignment.BottomCenter),
                 closeModal = { editState = false },
                 currentCategory = state.currentCategory,
-                showDateDialog = {dateDialogState.show()},
-                updateWidget = {context: Context -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    viewModel.updateWidget(context)
-                }
-                }
+                showDateDialog = {dateDialogState.show()}
             )
         }
 
