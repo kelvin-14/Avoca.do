@@ -18,6 +18,14 @@
         <item name="appWidgetPadding">16dp</item>
     </style>
 
+    <style name="Theme.Avocado.WidgetViewsActivity" parent="Theme.AppCompat">
+        <item name="background">@color/purple_700</item>
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+        <item name="android:textColor">@color/purple_700</item>
+
+    </style>
+
     <style name="ThemeOverlay.Avocado.FullscreenContainer" parent="">
         <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
         <item name="fullscreenTextColor">@color/light_blue_A200</item>

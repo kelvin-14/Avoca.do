@@ -18,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Avocado"
         tools:targetApi="31">
+        <activity
+            android:name=".WidgetViewsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
         <receiver
             android:name=".ListWidget"
             android:exported="false">
@@ -42,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <receiver android:name=".notification.AlarmReceiver" />
         <receiver android:name=".notification.OnCompletedBroadCastReceiver" />
         <receiver
@@ -54,10 +58,11 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notification.WidgetCheckboxBroadcastReceiver"
+        <receiver
+            android:name=".notification.WidgetCheckboxBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.happymeerkat.avocado.checkboxChange"/>
+                <action android:name="com.happymeerkat.avocado.checkboxChange" />
             </intent-filter>
         </receiver>
     </application>
