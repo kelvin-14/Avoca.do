@@ -34,9 +34,10 @@
         <activity
             android:name=".WidgetViewsActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.BottomSheetDialog"
+            android:theme="@style/WidgetActivityDialogsTheme"
             android:autoRemoveFromRecents="true"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.happymeerkat.avocado.WIDGET_ADD_TASK"/>
             </intent-filter>

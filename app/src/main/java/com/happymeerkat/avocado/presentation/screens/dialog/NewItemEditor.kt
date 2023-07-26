@@ -51,6 +51,7 @@ fun NewItemEditor(
     viewModel: EditItemVM = hiltViewModel(),
     currentCategory: Category,
     showDateDialog: () -> Unit,
+    alpha: Float = 0.8f
 ) {
     val state = viewModel.itemUIState.collectAsState().value
     val focusRequester = remember { FocusRequester() }
@@ -63,7 +64,7 @@ fun NewItemEditor(
         modifier = modifier
             .clickable { closeModal() }
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.8f))
+            .background(Color.Black.copy(alpha = alpha))
     ) {
         Row(
             modifier = Modifier
