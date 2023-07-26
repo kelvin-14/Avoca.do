@@ -82,7 +82,7 @@ fun NewItemEditor(
                         .focusRequester(focusRequester),
                     value = state.title,
                     onValueChange = {viewModel.editTitle(it)},
-                    placeholder = {Text("enter task")},
+                    placeholder = {Text("enter new task")},
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
                         onDone = {

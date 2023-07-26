@@ -37,7 +37,8 @@
             android:theme="@style/WidgetActivityDialogsTheme"
             android:autoRemoveFromRecents="true"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:fitsSystemWindows="false">
             <intent-filter>
                 <action android:name="com.happymeerkat.avocado.WIDGET_ADD_TASK"/>
             </intent-filter>

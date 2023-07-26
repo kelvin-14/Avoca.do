@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.happymeerkat.avocado.presentation.navigation.RootGraph
+import com.happymeerkat.avocado.presentation.vm.MainActVM
 import com.happymeerkat.avocado.ui.theme.AvocadoTheme
 import dagger.hilt.android.AndroidEntryPoint
 

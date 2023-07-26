@@ -210,3 +210,32 @@ data class ItemUIState(
     val selectedDate: LocalDate? = null
 )
 
+@HiltViewModel
+class MainActVM @Inject constructor(
+    private val listUseCases: ListUseCases
+): ViewModel() {
+    val visiblePermissionDialogueQueue = mutableListOf<String>()
+
+    init {
+        invokeDBCreation()
+    }
+
+    private fun invokeDBCreation() {
+        viewModelScope.launch {
+            listUseCases.categoryUpsert(Category(1, "All"))
+        }
+
+    }
+    fun dismissDialog() {
+        visiblePermissionDialogueQueue.removeLast()
+    }
+
+    fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean
+    ) {
+        if(!isGranted) {
+            visiblePermissionDialogueQueue.add(0, permission)
+        }
+    }
+}

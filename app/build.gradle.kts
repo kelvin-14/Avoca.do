@@ -1,3 +1,6 @@
+
+
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -14,8 +17,8 @@ android {
         applicationId = "com.happymeerkat.avocado"
         minSdk = 21
         targetSdk = 33
-        versionCode = 10284
-        versionName = "1.0.2.8.4"
+        versionCode = 10285
+        versionName = "1.0.2.8.5"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
