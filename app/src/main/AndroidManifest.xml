@@ -21,7 +21,13 @@
         <activity
             android:name=".WidgetViewsActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:autoRemoveFromRecents="true"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="com.happymeerkat.avocado.WIDGET_ADD_TASK"/>
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".ListWidget"

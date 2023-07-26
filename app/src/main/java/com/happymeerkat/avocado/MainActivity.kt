@@ -23,53 +23,33 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        val extras: Bundle? = intent.extras
-        Log.d("WIDGET EXTRA EXISTS??", intent.hasExtra("com.happymeerkat.avocado.WIDGET_ADD_TASK").toString())
-        val showFragment = extras?.getInt("com.happymeerkat.avocado.WIDGET_ADD_TASK", 0)
         super.onCreate(savedInstanceState)
 
-        Log.d("WIDGET EXTRAS", showFragment.toString())
-        if(showFragment != 0 && showFragment != null) {
-            AddTaskFragment()
-        } else {
-            setContent {
-                AvocadoTheme {
-                    val viewModel: MainActVM = hiltViewModel()
-                    val dialogQueue = viewModel.visiblePermissionDialogueQueue
-                    val notificationsPermissionResultLauncher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.RequestPermission(),
-                        onResult = {isGranted ->
-                            viewModel.onPermissionResult(
-                                permission = android.Manifest.permission.POST_NOTIFICATIONS,
-                                isGranted = isGranted
-                            )
-                        }
-                    )
-
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        RootGraph(
-                            askNotificationsPermission = {notificationsPermissionResultLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)},
-                            navController = rememberNavController()
+        setContent {
+            AvocadoTheme {
+                val viewModel: MainActVM = hiltViewModel()
+                val dialogQueue = viewModel.visiblePermissionDialogueQueue
+                val notificationsPermissionResultLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission(),
+                    onResult = {isGranted ->
+                        viewModel.onPermissionResult(
+                            permission = android.Manifest.permission.POST_NOTIFICATIONS,
+                            isGranted = isGranted
                         )
                     }
+                )
+
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    RootGraph(
+                        askNotificationsPermission = {notificationsPermissionResultLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)},
+                        navController = rememberNavController()
+                    )
                 }
             }
-        }
-
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val extras = intent?.getIntExtra("com.happymeerkat.avocado.WIDGET_ADD_TASK", 0)
-        if (extras != 0 && extras != null) {
-            Log.d("WIDGET", "MAIN ACTIVITY EXTRAS RECEIVED")
-            AddTaskFragment()
-        } else {
-            Log.d("WIDGET", "MAIN ACTIVITY NO EXTRAS RECEIVED")
         }
     }
 }

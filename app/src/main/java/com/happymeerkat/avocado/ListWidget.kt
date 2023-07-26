@@ -70,17 +70,17 @@ internal fun updateAppWidget(
     val views = RemoteViews(context.packageName, R.layout.list_widget)
     views.removeAllViews(R.id.scroll)
 
-    val addTaskIntent = Intent(context, WidgetViewsActivity::class.java)
-    addTaskIntent.putExtra("com.happymeerkat.avocado.WIDGET_ADD_TASK", 1)
-    addTaskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val addTaskIntent = Intent(context, WidgetViewsActivity::class.java).apply {
+        action = "com.happymeerkat.avocado.WIDGET_ADD_TASK"
+    }
     views.setOnClickPendingIntent(
         R.id.widget_add_task_button,
         PendingIntent
             .getActivity(
                 context,
-                0,
+                1,
                 addTaskIntent,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
     )
 
